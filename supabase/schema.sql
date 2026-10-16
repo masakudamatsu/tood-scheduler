@@ -37,3 +37,10 @@ create policy "Own settings" on public.settings
   for all to authenticated
   using (user_id = auth.uid())
   with check (user_id = auth.uid());
+
+
+-- Let signed-in users reach these tables through the Data API.
+-- (Needed because "Automatically expose new tables" is off.)
+-- The policies above still limit each user to their own rows.
+grant select, insert, update, delete on public.tasks to authenticated;
+grant select, insert, update, delete on public.settings to authenticated;

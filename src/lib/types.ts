@@ -5,6 +5,7 @@ export type Task = {
   due_date: string | null; // "YYYY-MM-DD" or null for no date
   hours: number | null;
   done: boolean;
+  sort_order: number; // order within its day (smaller = higher up)
   created_at: string;
 };
 
@@ -12,7 +13,11 @@ export type NewTask = {
   title: string;
   due_date: string | null;
   hours: number | null;
+  sort_order: number;
 };
+
+/** What the "add task" form provides; the app picks the order. */
+export type NewTaskInput = Omit<NewTask, "sort_order">;
 
 export type TaskPatch = Partial<Omit<Task, "id" | "created_at">>;
 

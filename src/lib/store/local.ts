@@ -5,7 +5,9 @@ const MAX_KEY = "tds.maxHours";
 
 function read(): Task[] {
   try {
-    return JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
+    const tasks: Task[] = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
+    // Tasks saved before reordering existed have no sort_order yet.
+    return tasks.map((t) => ({ ...t, sort_order: t.sort_order ?? 0 }));
   } catch {
     return [];
   }

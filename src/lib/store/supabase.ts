@@ -1,10 +1,14 @@
 import { getSupabase } from "../supabaseClient";
 import { DEFAULT_MAX_HOURS, type NewTask, type Task, type TaskPatch, type TaskStore } from "../types";
 
-const COLUMNS = "id, title, note, due_date, hours, done, created_at";
+const COLUMNS = "id, title, note, due_date, hours, done, sort_order, created_at";
 
 function normalize(row: Task): Task {
-  return { ...row, hours: row.hours == null ? null : Number(row.hours) };
+  return {
+    ...row,
+    hours: row.hours == null ? null : Number(row.hours),
+    sort_order: Number(row.sort_order ?? 0),
+  };
 }
 
 export const supabaseStore: TaskStore = {

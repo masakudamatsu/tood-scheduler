@@ -3,21 +3,47 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   DndContext,
+  DragOverlay,
   MouseSensor,
   TouchSensor,
+  pointerWithin,
+  rectIntersection,
   useSensor,
   useSensors,
+  type CollisionDetection,
   type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent,
 } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 import { store } from "@/lib/store";
 import { buildDayList, todayKey } from "@/lib/dates";
-import { DEFAULT_MAX_HOURS, type NewTask, type Task, type TaskPatch } from "@/lib/types";
+import {
+  DEFAULT_MAX_HOURS,
+  type NewTaskInput,
+  type Task,
+  type TaskPatch,
+} from "@/lib/types";
 import AddTaskForm from "./AddTaskForm";
 import DaySection from "./DaySection";
 import MaxHoursInput from "./MaxHoursInput";
+import { TaskCardView } from "./TaskCard";
 import TaskSheet from "./TaskSheet";
 
 const NO_DATE = "none";
+
+function dayOf(task: Task) {
+  return task.due_date ?? NO_DATE;
+}
+
+// Prefer the card under the pointer; otherwise the day under the pointer.
+const collisionDetection: CollisionDetection = (args) => {
+  const hits = pointerWithin(args);
+  const cardHits = hits.filter((h) => !String(h.id).startsWith("day:"));
+  if (cardHits.length) return cardHits;
+  if (hits.length) return hits;
+  return rectIntersection(args);
+};
 
 type Props = {
   localMode?: boolean;
@@ -32,6 +58,8 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
   const [error, setError] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
   const [daysAhead, setDaysAhead] = useState(28);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [overDay, setOverDay] = useState<string | null>(null);
   const today = todayKey();
   const scrolled = useRef(false);
 
@@ -69,9 +97,12 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
     }
   }
 
-  async function addTask(input: NewTask) {
+  async function addTask(input: NewTaskInput) {
     await save(async () => {
-      const task = await store.addTask(input);
+      const task = await store.addTask({
+        ...input,
+        sort_order: endOrder(input.due_date ?? NO_DATE),
+      });
       setTasks((prev) => [...prev, task]);
     });
   }
@@ -79,6 +110,20 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
   function updateTask(id: string, patch: TaskPatch) {
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...patch } : t)));
     save(() => store.updateTask(id, patch));
+  }
+
+  // Change several tasks at once (used when reordering a day).
+  function updateMany(changes: { id: string; patch: TaskPatch }[]) {
+    if (changes.length === 0) return;
+    const byId = new Map(changes.map((c) => [c.id, c.patch]));
+    setTasks((prev) => prev.map((t) => (byId.has(t.id) ? { ...t, ...byId.get(t.id) } : t)));
+    save(() => Promise.all(changes.map((c) => store.updateTask(c.id, c.patch))));
+  }
+
+  /** A sort_order that puts a task at the bottom of the given day. */
+  function endOrder(dayKey: string) {
+    const list = byDate.get(dayKey) ?? [];
+    return list.length ? Math.max(...list.map((t) => t.sort_order)) + 1 : 0;
   }
 
   function deleteTask(id: string) {
@@ -98,13 +143,66 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
     useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 8 } })
   );
 
+  function dayKeyOf(id: string): string | null {
+    if (id.startsWith("day:")) return id.slice(4);
+    const t = tasks.find((x) => x.id === id);
+    return t ? dayOf(t) : null;
+  }
+
+  function onDragStart(event: DragStartEvent) {
+    setDraggingId(String(event.active.id));
+  }
+
+  function onDragOver(event: DragOverEvent) {
+    setOverDay(event.over ? dayKeyOf(String(event.over.id)) : null);
+  }
+
+  function onDragCancel() {
+    setDraggingId(null);
+    setOverDay(null);
+  }
+
   function onDragEnd(event: DragEndEvent) {
-    const overId = event.over?.id;
-    if (typeof overId !== "string" || !overId.startsWith("day:")) return;
-    const target = overId.slice(4);
-    const due_date = target === NO_DATE ? null : target;
-    const task = tasks.find((t) => t.id === event.active.id);
-    if (task && task.due_date !== due_date) updateTask(task.id, { due_date });
+    onDragCancel();
+    const { active, over } = event;
+    const task = tasks.find((t) => t.id === active.id);
+    if (!task || !over) return;
+    const overId = String(over.id);
+    const targetDay = dayKeyOf(overId);
+    if (targetDay === null) return;
+
+    const sourceDay = dayOf(task);
+    const targetList = byDate.get(targetDay) ?? [];
+    let newOrder: Task[];
+
+    if (overId.startsWith("day:")) {
+      // Dropped on a day, not on a card: put it at the bottom.
+      if (targetDay === sourceDay) return;
+      newOrder = [...targetList, task];
+    } else if (targetDay === sourceDay) {
+      // Reorder within the same day.
+      const from = targetList.findIndex((t) => t.id === task.id);
+      const to = targetList.findIndex((t) => t.id === overId);
+      if (from === to) return;
+      newOrder = arrayMove(targetList, from, to);
+    } else {
+      // Moved onto a card in another day: insert above or below that card.
+      const overIndex = targetList.findIndex((t) => t.id === overId);
+      const dragged = active.rect.current.translated;
+      const below = dragged ? dragged.top + dragged.height / 2 > over.rect.top + over.rect.height / 2 : false;
+      newOrder = [...targetList];
+      newOrder.splice(overIndex + (below ? 1 : 0), 0, task);
+    }
+
+    const due_date = targetDay === NO_DATE ? null : targetDay;
+    updateMany(
+      newOrder.flatMap((t, i) => {
+        const patch: TaskPatch = {};
+        if (t.sort_order !== i) patch.sort_order = i;
+        if (t.id === task.id && t.due_date !== due_date) patch.due_date = due_date;
+        return Object.keys(patch).length ? [{ id: t.id, patch }] : [];
+      })
+    );
   }
 
   const byDate = useMemo(() => {
@@ -112,6 +210,11 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
     for (const t of tasks) {
       const key = t.due_date ?? NO_DATE;
       map.set(key, [...(map.get(key) ?? []), t]);
+    }
+    for (const list of map.values()) {
+      list.sort(
+        (a, b) => a.sort_order - b.sort_order || a.created_at.localeCompare(b.created_at)
+      );
     }
     return map;
   }, [tasks]);
@@ -127,6 +230,7 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
   );
 
   const openTask = tasks.find((t) => t.id === openId) ?? null;
+  const draggingTask = tasks.find((t) => t.id === draggingId) ?? null;
   const undated = byDate.get(NO_DATE) ?? [];
 
   return (
@@ -169,13 +273,21 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
         {!loaded && !error ? (
           <p className="py-8 text-center text-stone-500">Loading…</p>
         ) : (
-          <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={collisionDetection}
+            onDragStart={onDragStart}
+            onDragOver={onDragOver}
+            onDragEnd={onDragEnd}
+            onDragCancel={onDragCancel}
+          >
             <div className="space-y-3">
               {undated.length > 0 && (
                 <DaySection
                   dayKey={NO_DATE}
                   title="No date"
                   tasks={undated}
+                  highlighted={overDay === NO_DATE}
                   onToggle={(t) => updateTask(t.id, { done: !t.done })}
                   onOpen={(t) => setOpenId(t.id)}
                 />
@@ -187,12 +299,16 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
                   isToday={d === today}
                   isPast={d < today}
                   tasks={byDate.get(d) ?? []}
+                  highlighted={overDay === d}
                   maxHours={maxHours}
                   onToggle={(t) => updateTask(t.id, { done: !t.done })}
                   onOpen={(t) => setOpenId(t.id)}
                 />
               ))}
             </div>
+            <DragOverlay>
+              {draggingTask && <TaskCardView task={draggingTask} lifted />}
+            </DragOverlay>
           </DndContext>
         )}
 
@@ -212,6 +328,10 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
           task={openTask}
           onClose={() => setOpenId(null)}
           onSave={(patch) => {
+            // A new date puts the task at the bottom of that day.
+            if (patch.due_date !== undefined && patch.due_date !== openTask.due_date) {
+              patch.sort_order = endOrder(patch.due_date ?? NO_DATE);
+            }
             updateTask(openTask.id, patch);
             setOpenId(null);
           }}

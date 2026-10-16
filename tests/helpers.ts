@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 
 /** Today's date as "YYYY-MM-DD", in the browser's own time zone. */
 export async function today(page: Page): Promise<string> {
@@ -40,4 +40,32 @@ export function day(page: Page, key: string) {
 
 export function card(page: Page, title: string) {
   return page.locator(`[data-testid="task-card"][data-task-title="${title}"]`);
+}
+
+/** Titles of the cards in a day, top to bottom. */
+export async function titlesIn(page: Page, key: string): Promise<string[]> {
+  return day(page, key)
+    .getByTestId("task-card")
+    .evaluateAll((els) => els.map((el) => el.getAttribute("data-task-title") ?? ""));
+}
+
+/**
+ * Drag a card with the mouse and drop it on a point inside `target`.
+ * `at` picks where in the target: "top", "center" (default) or "bottom".
+ */
+export async function dragCard(
+  page: Page,
+  title: string,
+  target: Locator,
+  at: "top" | "center" | "bottom" = "center"
+) {
+  const from = (await card(page, title).boundingBox())!;
+  const to = (await target.boundingBox())!;
+  const y = { top: to.y + 4, center: to.y + to.height / 2, bottom: to.y + to.height - 4 }[at];
+  await page.mouse.move(from.x + 10, from.y + from.height / 2);
+  await page.mouse.down();
+  // Move in small steps so the drag library sees a real drag.
+  await page.mouse.move(from.x + 10, from.y + from.height / 2 + 10, { steps: 5 });
+  await page.mouse.move(to.x + 20, y, { steps: 15 });
+  await page.mouse.up();
 }

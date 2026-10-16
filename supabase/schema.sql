@@ -8,8 +8,12 @@ create table if not exists public.tasks (
   due_date date,
   hours numeric(4, 1) check (hours is null or hours >= 0),
   done boolean not null default false,
+  sort_order double precision not null default 0,
   created_at timestamptz not null default now()
 );
+
+-- Order of tasks within a day. (Safe to run again on an existing database.)
+alter table public.tasks add column if not exists sort_order double precision not null default 0;
 
 create index if not exists tasks_user_date_idx on public.tasks (user_id, due_date);
 

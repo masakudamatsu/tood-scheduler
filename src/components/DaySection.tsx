@@ -1,6 +1,7 @@
 "use client";
 
 import { useDroppable } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { formatDay } from "@/lib/dates";
 import type { Task } from "@/lib/types";
 import TaskCard from "./TaskCard";
@@ -11,6 +12,7 @@ type Props = {
   isToday?: boolean;
   isPast?: boolean;
   tasks: Task[];
+  highlighted?: boolean; // a card is being dragged over this day
   maxHours?: number;
   onToggle: (task: Task) => void;
   onOpen: (task: Task) => void;
@@ -22,11 +24,12 @@ export default function DaySection({
   isToday,
   isPast,
   tasks,
+  highlighted,
   maxHours,
   onToggle,
   onOpen,
 }: Props) {
-  const { setNodeRef, isOver } = useDroppable({ id: `day:${dayKey}` });
+  const { setNodeRef } = useDroppable({ id: `day:${dayKey}` });
   const total = tasks.reduce((sum, t) => sum + (t.hours ?? 0), 0);
   const overloaded = maxHours !== undefined && total > maxHours;
   const day = title ? null : formatDay(dayKey);
@@ -42,7 +45,7 @@ export default function DaySection({
       className={[
         "scroll-mt-16 rounded-xl px-3 py-2 transition-colors",
         overloaded ? "border-2 border-red-500 bg-red-50/40" : "border-2 border-transparent",
-        isOver ? "bg-teal-50 ring-2 ring-teal-500/40" : "",
+        highlighted ? "bg-teal-50 ring-2 ring-teal-500/40" : "",
         isPast ? "opacity-70" : "",
       ].join(" ")}
     >
@@ -77,11 +80,13 @@ export default function DaySection({
       {tasks.length === 0 ? (
         <p className="py-1 text-xs text-stone-400">Nothing planned</p>
       ) : (
-        <ul className="mt-2 space-y-2">
-          {tasks.map((t) => (
-            <TaskCard key={t.id} task={t} onToggle={() => onToggle(t)} onOpen={() => onOpen(t)} />
-          ))}
-        </ul>
+        <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
+          <ul className="mt-2 space-y-2">
+            {tasks.map((t) => (
+              <TaskCard key={t.id} task={t} onToggle={() => onToggle(t)} onOpen={() => onOpen(t)} />
+            ))}
+          </ul>
+        </SortableContext>
       )}
     </section>
   );

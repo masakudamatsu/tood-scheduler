@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import type { NewTask } from "@/lib/types";
+import type { NewTaskInput } from "@/lib/types";
 
 export default function AddTaskForm({
   defaultDate,
   onAdd,
 }: {
   defaultDate: string;
-  onAdd: (task: NewTask) => Promise<void>;
+  onAdd: (task: NewTaskInput) => Promise<void>;
 }) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(defaultDate);

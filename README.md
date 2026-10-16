@@ -7,6 +7,7 @@ Plan what to do each day without overloading yourself.
 - Tap a task to see its note. Any `https://…` you paste becomes a clickable link.
 - Give each task a date and estimated hours. If a day's hours go over your daily limit (8 by default, set in the top bar), that day gets a red border.
 - Drag a task card to another day to move it. On a phone, press and hold the card for a moment, then drag.
+- Drag a task card up or down within a day to change its order. Drop it onto a card in another day to put it at that exact spot.
 
 Built with Next.js, Tailwind CSS and Supabase. Deployed on Vercel.
 
@@ -24,7 +25,7 @@ Open http://localhost:3000. Without Supabase keys the app runs in **local mode**
 ## 2. Connect Supabase (about 5 minutes)
 
 1. Go to https://supabase.com, sign up, and click **New project**. Pick any name, set a database password, and pick the region closest to you.
-2. When the project is ready, open **SQL Editor → New query**, paste everything in `supabase/schema.sql`, and click **Run**. This creates the `tasks` and `settings` tables. It also turns on Row Level Security, a database rule that lets each signed-in person see only their own rows.
+2. When the project is ready, open **SQL Editor → New query**, paste everything in `supabase/schema.sql`, and click **Run**. (If you ran an older copy of this file before, run it again. It's safe to re-run, and it adds the column that stores each task's order.) This creates the `tasks` and `settings` tables. It also turns on Row Level Security, a database rule that lets each signed-in person see only their own rows.
 3. Open **Authentication → URL Configuration**:
    - **Site URL:** `http://localhost:3000` for now (change it to your Vercel link after step 4).
    - **Redirect URLs:** add `http://localhost:3000`. Add your Vercel link later too.

@@ -29,7 +29,7 @@ Open http://localhost:3000. Without Supabase keys the app runs in **local mode**
 3. Open **Authentication → URL Configuration**:
    - **Site URL:** `http://localhost:3000` for now (change it to your Vercel link after step 4).
    - **Redirect URLs:** add `http://localhost:3000`. Add your Vercel link later too.
-4. Click **Connect** at the top of the project (or go to **Project Settings → API**). Copy the **Project URL** and the **anon public** key.
+4. Click **Connect** at the top of the project. Copy the two lines it shows: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. (The publishable key is safe to use in the browser. It replaces what Supabase used to call the "anon" key.)
 5. In this folder, copy `.env.local.example` to `.env.local` and paste in the two values.
 6. Restart `npm run dev`. You'll now see a sign-in screen. Enter your email, open the link Supabase emails you, and you're in.
 
@@ -54,7 +54,7 @@ There's one Playwright test per feature, in `tests/`. Tests start their own serv
    git push -u origin main
    ```
 2. On https://vercel.com, click **Add New → Project** and import the repository.
-3. Under **Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` with the same values as in `.env.local`. Click **Deploy**.
+3. Under **Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` with the same values as in `.env.local`. Click **Deploy**.
 4. Copy your new link (for example `https://todo-scheduler-xyz.vercel.app`). Back in Supabase **Authentication → URL Configuration**, set it as the **Site URL** and add it to **Redirect URLs**.
 
 ## Project layout

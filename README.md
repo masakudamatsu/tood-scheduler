@@ -48,11 +48,23 @@ There's one Playwright test per feature, in `tests/`. Tests start their own serv
 
 ## 4. Deploy to Vercel (about 5 minutes)
 
-1. Create an empty repository on GitHub, then push this folder:
-   ```bash
-   git remote add origin https://github.com/YOUR-NAME/todo-scheduler.git
-   git push -u origin main
-   ```
+1. Push this folder to GitHub:
+   1. On GitHub, create a new repository named `todo-scheduler`. Leave it **empty**: don't add a README, license or .gitignore, or they'll clash with this folder.
+   2. Pick the address that matches how your computer signs in to GitHub. In the commands below, replace `<your-username>` (including the angle brackets) with your GitHub username.
+      - **You've set up an SSH key with GitHub** (a key pair: one half on your computer, the other half saved in GitHub's settings). Use the SSH address:
+        ```bash
+        git remote add origin git@github.com:<your-username>/todo-scheduler.git
+        ```
+      - **You haven't, or you aren't sure.** Use the HTTPS address:
+        ```bash
+        git remote add origin https://github.com/<your-username>/todo-scheduler.git
+        ```
+        GitHub doesn't accept your account password here, so set up a sign-in first. The easiest way is GitHub's command-line tool: install it from https://cli.github.com, run `gh auth login`, and choose **HTTPS** when it asks. Alternatively, when `git push` asks for a password, paste a personal access token (a password-like code you create on GitHub under **Settings → Developer settings → Personal access tokens**).
+   3. Push:
+      ```bash
+      git push -u origin main
+      ```
+   If you typed the wrong address, fix it with `git remote set-url origin <correct-address>`, then check it with `git remote -v`.
 2. On https://vercel.com, click **Add New → Project** and import the repository.
 3. Under **Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` with the same values as in `.env.local`. Click **Deploy**.
 4. Copy your new link (for example `https://todo-scheduler-xyz.vercel.app`). Back in Supabase **Authentication → URL Configuration**, set it as the **Site URL** and add it to **Redirect URLs**.

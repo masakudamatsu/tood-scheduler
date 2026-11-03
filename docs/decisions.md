@@ -15,6 +15,10 @@ Choices that aren't obvious from reading the code. Each entry says what we decid
 - **"Automatically expose new tables" is off.** That's why `schema.sql` needs a `grant` line for each table.
 - **Supabase's built-in email service sends only a few emails per hour.** Fine for one user. Set up custom SMTP (a separate email-sending service) if more people use the app.
 
+## GitHub settings (on github.com, not in this repo)
+
+- **`main` is protected: every change must go through a pull request.** Pushing straight to `main` fails. Why: Claude works on issues by itself, so this makes sure Masa reviews every change before it reaches `main`.
+
 ## Hours and the daily limit
 
 - **Done tasks still count toward a day's hours.** Why: the hours show how much was planned for that day. Finishing a task doesn't make the day lighter.

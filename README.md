@@ -5,6 +5,7 @@ Plan what to do each day without overloading yourself.
 - Days are listed top to bottom, like Google Calendar's Schedule view.
 - Tick a task's checkbox when it's done.
 - Tap a task to see its note. Any `https://…` you paste becomes a clickable link.
+- To delete a task, tap it and press **Delete**. The app asks first, so a stray tap won't lose anything.
 - Give each task a date and estimated hours. If a day's hours go over your daily limit (8 by default, set in the top bar), that day gets a red border.
 - Drag a task card to another day to move it. On a phone, press and hold the card for a moment, then drag.
 - Drag a task card up or down within a day to change its order. Drop it onto a card in another day to put it at that exact spot.

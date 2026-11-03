@@ -29,5 +29,5 @@ Decisions that the code doesn't explain are in @docs/decisions.md. Read it befor
 ## Git
 
 - One branch per task.
-- Don't commit or push unless Masa asks. When a task is done, suggest a commit message instead.
+- Don't commit or push unless Masa asks, or a skill he runs says to. When a task is done, suggest a commit message instead.
 - If the task comes from a GitHub issue, include `Fixes #<number>` in the commit message or pull request. Use `gh` to read and create issues.

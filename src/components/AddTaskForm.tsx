@@ -47,7 +47,7 @@ export default function AddTaskForm({
           aria-label="Date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="rounded-md border border-stone-300 px-2 py-1 text-sm"
+          className="rounded-md border border-stone-300 px-2 py-1 text-base"
         />
         <input
           type="number"
@@ -58,7 +58,7 @@ export default function AddTaskForm({
           inputMode="decimal"
           value={hours}
           onChange={(e) => setHours(e.target.value)}
-          className="w-20 rounded-md border border-stone-300 px-2 py-1 text-sm"
+          className="w-20 rounded-md border border-stone-300 px-2 py-1 text-base"
         />
         <button
           type="submit"

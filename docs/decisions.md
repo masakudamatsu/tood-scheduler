@@ -19,7 +19,7 @@ Choices that aren't obvious from reading the code. Each entry says what we decid
 
   If an address isn't listed, Supabase shows no error. It quietly sends the user to the Site URL (production) instead. So a new domain must be added there, or sign-in goes to the wrong site.
 - **"Automatically expose new tables" is off.** That's why `schema.sql` needs a `grant` line for each table.
-- **Supabase's built-in email service sends only a few emails per hour.** Fine for one user. Set up custom SMTP (a separate email-sending service) if more people use the app.
+- **Supabase's built-in email service sends only two emails per hour.** Fine for one user. Set up custom SMTP (a separate email-sending service) if more people use the app.
 
 ## GitHub settings (on github.com, not in this repo)
 

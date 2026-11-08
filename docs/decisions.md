@@ -11,9 +11,15 @@ Choices that aren't obvious from reading the code. Each entry says what we decid
 
 - **Magic-link sign-in uses the "implicit" flow.** Why: the link then works even when opened in a different browser or device. The default "PKCE" flow needs the same browser.
 - **Sign-up is open.** Anyone with an email address can make an account, but RLS keeps their data apart from Masa's. Sign-ups can be turned off in the dashboard.
-- **Allowed sign-in link addresses.** Supabase only sends users back to addresses listed under Authentication → URL Configuration: `http://localhost:3000` and the Vercel link. A new domain must be added there, or sign-in breaks.
+- **Allowed sign-in link addresses.** Supabase only sends users back to addresses listed under Authentication → URL Configuration. The following URLs are added to the list:
+
+  - `http://localhost:3000` for local development server
+  - `https://tood-scheduler.vercel.app/` (the Site URL) for production
+  - `https://tood-scheduler-*-masakudamatsu.vercel.app/**` for preview deployments (`*` matches any branch name). 
+
+  If an address isn't listed, Supabase shows no error. It quietly sends the user to the Site URL (production) instead. So a new domain must be added there, or sign-in goes to the wrong site.
 - **"Automatically expose new tables" is off.** That's why `schema.sql` needs a `grant` line for each table.
-- **Supabase's built-in email service sends only a few emails per hour.** Fine for one user. Set up custom SMTP (a separate email-sending service) if more people use the app.
+- **Supabase's built-in email service sends only two emails per hour.** Fine for one user. Set up custom SMTP (a separate email-sending service) if more people use the app.
 
 ## GitHub settings (on github.com, not in this repo)
 

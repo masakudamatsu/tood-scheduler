@@ -69,6 +69,7 @@ There's one Playwright test per feature, in `tests/`. Tests start their own serv
 2. On https://vercel.com, click **Add New → Project** and import the repository.
 3. Under **Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` with the same values as in `.env.local`. Click **Deploy**.
 4. Copy your new link (for example `https://todo-scheduler-xyz.vercel.app`). Back in Supabase **Authentication → URL Configuration**, set it as the **Site URL** and add it to **Redirect URLs**.
+5. To sign in on preview deployments too (the test links Vercel makes for each branch), also add `https://<project-name>-*-<your-vercel-account>.vercel.app/**` to **Redirect URLs**. The `*` matches any branch name. Without this, the sign-in link sends you to the Site URL instead.
 
 ## Project layout
 

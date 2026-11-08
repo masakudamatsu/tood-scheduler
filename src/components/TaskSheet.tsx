@@ -75,7 +75,7 @@ export default function TaskSheet({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="rounded-md border border-stone-300 px-2 py-1"
+              className="rounded-md border border-stone-300 px-2 py-1 text-base"
             />
           </label>
           <label className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export default function TaskSheet({
               inputMode="decimal"
               value={hours}
               onChange={(e) => setHours(e.target.value)}
-              className="w-20 rounded-md border border-stone-300 px-2 py-1"
+              className="w-20 rounded-md border border-stone-300 px-2 py-1 text-base"
             />
           </label>
         </div>
@@ -112,7 +112,7 @@ export default function TaskSheet({
               onChange={(e) => setNote(e.target.value)}
               rows={6}
               placeholder="Add details. Paste a link and it becomes clickable."
-              className="mt-1 w-full rounded-md border border-stone-300 px-2 py-1.5 text-sm"
+              className="mt-1 w-full rounded-md border border-stone-300 px-2 py-1.5 text-base"
             />
           ) : (
             <div

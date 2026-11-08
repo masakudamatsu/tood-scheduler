@@ -35,7 +35,7 @@ export default function MaxHoursInput({
         onChange={(e) => setDraft(e.target.value)}
         onBlur={commit}
         onKeyDown={(e) => e.key === "Enter" && (e.currentTarget as HTMLInputElement).blur()}
-        className="w-14 rounded-md border border-stone-300 bg-white px-1.5 py-1 text-right text-stone-900"
+        className="w-16 rounded-md border border-stone-300 bg-white px-1.5 py-1 text-right text-base text-stone-900"
       />
       <span>h</span>
     </label>

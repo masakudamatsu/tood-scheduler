@@ -6,8 +6,17 @@ test("tasks appear under their day, in date order, and survive a reload", async 
   const t0 = await today(page);
   const t2 = await addDays(page, t0, 2);
 
-  await addTask(page, "Write report", { date: t0 });
+  // The new task form looks like the task editor, minus Delete and Cancel.
+  const form = page.getByRole("form", { name: "Add a task" });
+  await expect(form.getByLabel("Note")).toBeVisible();
+  await expect(form.getByRole("button")).toHaveText(["Add"]);
+
+  await addTask(page, "Write report", { date: t0, note: "Draft: https://example.com/report" });
   await addTask(page, "Call the bank", { date: t2 });
+
+  // The form is cleared for the next task.
+  await expect(form.getByLabel("Title")).toHaveValue("");
+  await expect(form.getByLabel("Note")).toHaveValue("");
 
   await expect(day(page, t0).getByText("Write report")).toBeVisible();
   await expect(day(page, t2).getByText("Call the bank")).toBeVisible();
@@ -20,4 +29,10 @@ test("tasks appear under their day, in date order, and survive a reload", async 
   await page.reload();
   await expect(card(page, "Write report")).toBeVisible();
   await expect(day(page, t2).getByText("Call the bank")).toBeVisible();
+
+  // The note typed in the new task form was saved with the task.
+  await card(page, "Write report").getByRole("button").click();
+  await expect(page.getByRole("dialog").getByTestId("note-view")).toHaveText(
+    "Draft: https://example.com/report"
+  );
 });

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Linkify } from "@/lib/linkify";
 import type { Task, TaskPatch } from "@/lib/types";
+import TaskFields, { parseTaskFields, type TaskFieldValues } from "./TaskFields";
 
 export default function TaskSheet({
   task,
@@ -15,11 +15,12 @@ export default function TaskSheet({
   onSave: (patch: TaskPatch) => void;
   onDelete: () => void;
 }) {
-  const [title, setTitle] = useState(task.title);
-  const [date, setDate] = useState(task.due_date ?? "");
-  const [hours, setHours] = useState(task.hours == null ? "" : String(task.hours));
-  const [note, setNote] = useState(task.note);
-  const [editingNote, setEditingNote] = useState(!task.note.trim());
+  const [values, setValues] = useState<TaskFieldValues>({
+    title: task.title,
+    date: task.due_date ?? "",
+    hours: task.hours == null ? "" : String(task.hours),
+    note: task.note,
+  });
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const firstField = useRef<HTMLInputElement>(null);
   const questionId = useId();
@@ -41,13 +42,8 @@ export default function TaskSheet({
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const h = Number(hours);
-    onSave({
-      title: title.trim() || task.title,
-      due_date: date || null,
-      hours: hours !== "" && h >= 0 ? h : null,
-      note,
-    });
+    const patch = parseTaskFields(values);
+    onSave({ ...patch, title: patch.title || task.title });
   }
 
   return (
@@ -60,69 +56,7 @@ export default function TaskSheet({
         onSubmit={onSubmit}
         className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-t-2xl bg-white p-4 shadow-xl sm:rounded-2xl"
       >
-        <input
-          ref={firstField}
-          aria-label="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-md px-1 py-1 text-lg font-medium outline-none focus:bg-stone-50"
-        />
-
-        <div className="mt-3 flex flex-wrap gap-3 text-sm">
-          <label className="flex items-center gap-2">
-            <span className="text-stone-600">Date</span>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="rounded-md border border-stone-300 px-2 py-1 text-base"
-            />
-          </label>
-          <label className="flex items-center gap-2">
-            <span className="text-stone-600">Hours</span>
-            <input
-              type="number"
-              min={0}
-              step={0.5}
-              inputMode="decimal"
-              value={hours}
-              onChange={(e) => setHours(e.target.value)}
-              className="w-20 rounded-md border border-stone-300 px-2 py-1 text-base"
-            />
-          </label>
-        </div>
-
-        <div className="mt-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-stone-700">Note</span>
-            {!editingNote && (
-              <button
-                type="button"
-                onClick={() => setEditingNote(true)}
-                className="text-sm text-teal-700 underline underline-offset-2"
-              >
-                Edit note
-              </button>
-            )}
-          </div>
-          {editingNote ? (
-            <textarea
-              aria-label="Note"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              rows={6}
-              placeholder="Add details. Paste a link and it becomes clickable."
-              className="mt-1 w-full rounded-md border border-stone-300 px-2 py-1.5 text-base"
-            />
-          ) : (
-            <div
-              data-testid="note-view"
-              className="mt-1 whitespace-pre-wrap break-words rounded-md bg-stone-50 px-3 py-2 text-sm"
-            >
-              <Linkify text={note} />
-            </div>
-          )}
-        </div>
+        <TaskFields values={values} onChange={setValues} titleRef={firstField} />
 
         <div className="mt-5 flex items-center gap-2">
           <button

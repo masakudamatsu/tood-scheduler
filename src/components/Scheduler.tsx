@@ -24,7 +24,7 @@ import {
   type Task,
   type TaskPatch,
 } from "@/lib/types";
-import AddTaskForm from "./AddTaskForm";
+import AddTaskPopup from "./AddTaskPopup";
 import DaySection from "./DaySection";
 import MaxHoursInput from "./MaxHoursInput";
 import { TaskCardView } from "./TaskCard";
@@ -254,15 +254,13 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-xl px-4 pb-24">
+      <main className="mx-auto max-w-xl px-4 pt-3 pb-24">
         {localMode && (
-          <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900 ring-1 ring-amber-200">
+          <p className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900 ring-1 ring-amber-200">
             Local mode: tasks are saved in this browser only. Add your Supabase keys to
             sync and sign in.
           </p>
         )}
-
-        <AddTaskForm defaultDate={today} onAdd={addTask} />
 
         {error && (
           <p role="alert" className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">
@@ -322,6 +320,8 @@ export default function Scheduler({ localMode, userEmail, onSignOut }: Props) {
           </button>
         )}
       </main>
+
+      <AddTaskPopup defaultDate={today} onAdd={addTask} />
 
       {openTask && (
         <TaskSheet

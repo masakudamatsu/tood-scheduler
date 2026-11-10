@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type Ref } from "react";
+import { useState } from "react";
 import { Linkify } from "@/lib/linkify";
 
 /** What the user has typed, before it's turned into task values. */
@@ -22,15 +22,13 @@ export function parseTaskFields(v: TaskFieldValues) {
   };
 }
 
-/** Title, date, hours and note: shared by the new task form and the task editor. */
+/** Title, date, hours and note: shared by the new task popup and the task editor. */
 export default function TaskFields({
   values,
   onChange,
-  titleRef,
 }: {
   values: TaskFieldValues;
   onChange: (values: TaskFieldValues) => void;
-  titleRef?: Ref<HTMLInputElement>;
 }) {
   // A saved note is shown with clickable links until the user taps "Edit note".
   const [editingNote, setEditingNote] = useState(!values.note.trim());
@@ -40,7 +38,8 @@ export default function TaskFields({
   return (
     <>
       <input
-        ref={titleRef}
+        // Both popups that use these fields start with the title.
+        autoFocus
         aria-label="Title"
         placeholder="What to do?"
         value={values.title}

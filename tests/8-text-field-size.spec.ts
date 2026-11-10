@@ -1,5 +1,5 @@
 import { expect, test, type Locator } from "@playwright/test";
-import { addTask, card } from "./helpers";
+import { addTask, card, newTaskPopup } from "./helpers";
 
 // iOS browsers zoom the page when the user taps a text field whose font size
 // is under 16px. Playwright can't run iOS Safari, so we check the font size.
@@ -15,8 +15,16 @@ async function smallFields(scope: Locator): Promise<string[]> {
 
 test("text fields on the main page are at least 16px, so iOS doesn't zoom", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("form", { name: "Add a task" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Add a task" })).toBeVisible();
   expect(await smallFields(page.locator("body"))).toEqual([]);
+});
+
+test("text fields in the new task popup are at least 16px, so iOS doesn't zoom", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Add a task" }).click();
+  const popup = newTaskPopup(page);
+  await expect(popup.getByLabel("Note")).toBeVisible();
+  expect(await smallFields(popup)).toEqual([]);
 });
 
 test("text fields in the task sheet are at least 16px, so iOS doesn't zoom", async ({ page }) => {

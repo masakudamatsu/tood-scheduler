@@ -26,13 +26,19 @@ export async function addTask(
   title: string,
   opts: { date?: string; hours?: number; note?: string } = {}
 ) {
-  const form = page.getByRole("form", { name: "Add a task" });
-  await form.getByLabel("Title").fill(title);
-  if (opts.date) await form.getByLabel("Date").fill(opts.date);
-  if (opts.hours !== undefined) await form.getByLabel("Hours").fill(String(opts.hours));
-  if (opts.note !== undefined) await form.getByLabel("Note").fill(opts.note);
-  await form.getByRole("button", { name: "Add" }).click();
+  await page.getByRole("button", { name: "Add a task" }).click();
+  const popup = newTaskPopup(page);
+  await popup.getByLabel("Title").fill(title);
+  if (opts.date) await popup.getByLabel("Date").fill(opts.date);
+  if (opts.hours !== undefined) await popup.getByLabel("Hours").fill(String(opts.hours));
+  if (opts.note !== undefined) await popup.getByLabel("Note").fill(opts.note);
+  await popup.getByRole("button", { name: "Save" }).click();
+  await expect(popup).toBeHidden();
   await expect(card(page, title)).toBeVisible();
+}
+
+export function newTaskPopup(page: Page) {
+  return page.getByRole("dialog", { name: "New task" });
 }
 
 export function day(page: Page, key: string) {

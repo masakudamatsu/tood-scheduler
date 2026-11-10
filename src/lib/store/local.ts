@@ -28,7 +28,6 @@ export const localStore: TaskStore = {
   async addTask(input: NewTask) {
     const task: Task = {
       id: crypto.randomUUID(),
-      note: "",
       done: false,
       created_at: new Date().toISOString(),
       ...input,

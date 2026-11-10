@@ -24,12 +24,13 @@ export async function addDays(page: Page, key: string, days: number): Promise<st
 export async function addTask(
   page: Page,
   title: string,
-  opts: { date?: string; hours?: number } = {}
+  opts: { date?: string; hours?: number; note?: string } = {}
 ) {
   const form = page.getByRole("form", { name: "Add a task" });
-  await form.getByLabel("What to do").fill(title);
+  await form.getByLabel("Title").fill(title);
   if (opts.date) await form.getByLabel("Date").fill(opts.date);
-  if (opts.hours !== undefined) await form.getByLabel("Estimated hours").fill(String(opts.hours));
+  if (opts.hours !== undefined) await form.getByLabel("Hours").fill(String(opts.hours));
+  if (opts.note !== undefined) await form.getByLabel("Note").fill(opts.note);
   await form.getByRole("button", { name: "Add" }).click();
   await expect(card(page, title)).toBeVisible();
 }

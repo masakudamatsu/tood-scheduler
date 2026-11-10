@@ -11,6 +11,7 @@ export type Task = {
 
 export type NewTask = {
   title: string;
+  note: string;
   due_date: string | null;
   hours: number | null;
   sort_order: number;

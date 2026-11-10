@@ -4,7 +4,7 @@ Plan what to do each day without overloading yourself.
 
 - Days are listed top to bottom, like Google Calendar's Schedule view.
 - Tick a task's checkbox when it's done.
-- Tap a task to see its note. Any `https://…` you paste becomes a clickable link.
+- Add a note when you create a task, or tap a task later to see or change its note. Any `https://…` you paste becomes a clickable link.
 - To delete a task, tap it and press **Delete**. The app asks first, so a stray tap won't lose anything.
 - Give each task a date and estimated hours. If a day's hours go over your daily limit (8 by default, set in the top bar), that day gets a red border.
 - Drag a task card to another day to move it. On a phone, press and hold the card for a moment, then drag.
@@ -78,7 +78,9 @@ There's one Playwright test per feature, in `tests/`. Tests start their own serv
 | `src/components/Scheduler.tsx` | The main screen: loads tasks, handles drag and drop |
 | `src/components/DaySection.tsx` | One day: total hours and the red border |
 | `src/components/TaskCard.tsx` | One task card: checkbox and drag handle |
-| `src/components/TaskSheet.tsx` | Task details: date, hours and note |
+| `src/components/TaskSheet.tsx` | Task details pop-up, with Save, Cancel and Delete |
+| `src/components/AddTaskForm.tsx` | The new task form at the top |
+| `src/components/TaskFields.tsx` | Title, date, hours and note: shared by the two forms above |
 | `src/lib/linkify.tsx` | Turns URLs in notes into links |
 | `src/lib/store/` | Saving data: `supabase.ts` (real) and `local.ts` (browser only) |
 | `supabase/schema.sql` | Database tables and access rules |

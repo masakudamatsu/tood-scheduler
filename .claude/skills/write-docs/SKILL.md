@@ -15,7 +15,4 @@ Function names, file contents, how the code works step by step: anyone can find 
 
 ## Adding a skill
 
-A skill holds rules that matter for only some tasks. An agent reads a skill when its description matches the task, so:
-
-- Write a description that says plainly when to use the skill. Name the files or the kind of task it covers.
-- Add a line for the skill to the skills list in AGENTS.md.
+A skill holds rules that matter for only some tasks. An agent reads a skill when its description matches the task. So write a description that says plainly when to use the skill: name the files or the kind of task it covers.

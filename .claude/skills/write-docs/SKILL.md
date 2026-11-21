@@ -18,4 +18,4 @@ Function names, file contents, how the code works step by step: anyone can find 
 A skill holds rules that matter for only some tasks. An agent reads a skill when its description matches the task, so:
 
 - Write a description that says plainly when to use the skill. Name the files or the kind of task it covers.
-- Add a line for the skill to the skills list in AGENTS.md.
+- Add a line for the skill to the skills list in CLAUDE.md.

@@ -7,10 +7,8 @@ To Do Scheduler is a web app that helps the user plan what to do each day **with
 Decisions are recorded in `docs/adrs/`, one file per decision. Before a task, list `docs/adrs/` and read the records that matter for the task. Also read [docs/primitives.md](docs/primitives.md): it lists the app's building blocks, and says how to use and update the list. **When a task involves a decision, write a record** by copying `docs/adrs/0000-template.md`.
 
 - **Tests first.** For a new feature or a bug fix, write a Playwright test that fails (or update the existing tests so they fail with the current codebase), then write the code to make it pass. Finish only when `npm run verify` passes.
-- **Changing what the app saves** (a task's fields, a table, `supabase/schema.sql`)? Use the `change-database` skill first.
 - **Plain English** in the README, docs, UI text and explanations: everyday words, short sentences. Define a technical term once when you need it.
 - **Update the README** when a feature changes what the user sees.
-- **Writing docs** (the README, `docs/`, a skill)? Use the `write-docs` skill first.
 
 ## Never do
 
@@ -26,5 +24,14 @@ These were decided already. Don't propose them again.
 
 - One branch per task.
 - Don't commit or push unless Masa asks, or a skill he runs says to. When a task is done, suggest a commit message instead.
-- If the task comes from a GitHub issue, include `Fixes #<number>` in the commit message or pull request. Use `gh` to read and create issues.
-- To work on a GitHub issue, use the `work-on-issue` skill. To handle review comments on a pull request, use `address-review`. Never merge a pull request: Masa does that.
+- Never merge a pull request: Masa does that.
+
+## Skills
+
+Skills in [.claude/skills/](.claude/skills/) hold the steps or rules for only some tasks. Use the one that matches the task:
+
+- [work-on-issue](.claude/skills/work-on-issue/SKILL.md): work on a GitHub issue, from start to a pull request.
+- [address-review](.claude/skills/address-review/SKILL.md): handle Masa's review comments on a pull request.
+- [change-database](.claude/skills/change-database/SKILL.md): change what the app saves (a task's fields, a table, `supabase/schema.sql`).
+- [write-docs](.claude/skills/write-docs/SKILL.md): write the README, `docs/`, or a skill.
+- [suggest-commit](.claude/skills/suggest-commit/SKILL.md): write a commit message, including `Fixes #<number>` when the task comes from a GitHub issue. [commit](.claude/skills/commit/SKILL.md) uses the same rules and commits.

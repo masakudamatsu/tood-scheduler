@@ -21,4 +21,8 @@ What stays simple, and what gets harder. Keep it short: a few bullet points or s
 
 Write a record when someone changing the code later might ask "why is it like this?" and the code can't answer. Don't write one just to note that a change shipped: git history already does that.
 
+A code comment can point to the record, but the reason goes in the record, not in the comment.
+
+If a decision changes, write a new record. Then set the old record's **Status** to "superseded by" the new one.
+
 After you write a record, add its link to the `adrs` list of each building block it shapes in [docs/primitives.md](../primitives.md).

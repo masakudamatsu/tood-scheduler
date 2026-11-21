@@ -1,6 +1,10 @@
 # Building blocks
 
-The main parts of the app, where each one lives, and the decision records (in [adrs/](adrs/)) that shape it. [CLAUDE.md](../CLAUDE.md) says how to use and update this list.
+The main parts of the app, where each one lives, and the decision records (in [adrs/](adrs/)) that shape it.
+
+- **Use an existing block** instead of writing a new one that does the same job.
+- **Before you change a block, read the records listed under it.**
+- **Keep this list up to date.** A pull request that adds or reshapes a building block, or adds or changes a record in [adrs/](adrs/), updates this list in the same pull request.
 
 ## Data
 
@@ -40,3 +44,8 @@ The main parts of the app, where each one lives, and the decision records (in [a
   - adrs: [0007](adrs/0007-tests-check-class-names.md)
 - **Pre-commit hook**: [.githooks/pre-commit](../.githooks/pre-commit). Runs lint and the type check before each commit.
   - adrs: [0013](adrs/0013-pre-commit-hook.md)
+
+## Rules for agents
+
+- **Agent rules**: [AGENTS.md](../AGENTS.md) (rules for every task), [CLAUDE.md](../CLAUDE.md) (only imports AGENTS.md) and [.agents/skills/](../.agents/skills/) (rules and steps for only some tasks, with a symlink to each in `.claude/skills/`).
+  - adrs: [0014](adrs/0014-every-decision-gets-a-record.md), [0016](adrs/0016-docs-not-what-code-says.md), [0017](adrs/0017-claude-md-imports-agents-md.md), [0018](adrs/0018-rules-for-some-tasks-in-skills.md), [0019](adrs/0019-skills-in-agents-folder.md)

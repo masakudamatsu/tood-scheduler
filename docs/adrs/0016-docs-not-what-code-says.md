@@ -5,7 +5,7 @@
 
 ## Context
 
-The first draft of [docs/primitives.md](../primitives.md) named the functions inside each file, such as the date helpers and the popup buttons. An agent can find those by reading the code, and each name is one more thing that goes out of date when the code changes. No rule in [CLAUDE.md](../../CLAUDE.md) said to leave them out.
+The first draft of [docs/primitives.md](../primitives.md) named the functions inside each file, such as the date helpers and the popup buttons. An agent can find those by reading the code, and each name is one more thing that goes out of date when the code changes. No rule in `CLAUDE.md` (now [AGENTS.md](../../AGENTS.md)) said to leave them out.
 
 ## Decision
 

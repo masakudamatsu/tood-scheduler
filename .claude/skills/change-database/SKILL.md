@@ -3,7 +3,7 @@ name: change-database
 description: Rules for changing what the app saves - adding a field to a task, adding a table, or any change to supabase/schema.sql, src/lib/types.ts or src/lib/store/. Use before editing any of these files.
 ---
 
-The "Never do" rules in CLAUDE.md still apply: never touch the real database, and never remove or rename anything in `supabase/schema.sql`.
+The "Never do" rules in AGENTS.md still apply: never touch the real database, and never remove or rename anything in `supabase/schema.sql`.
 
 ## Adding a field to a task
 

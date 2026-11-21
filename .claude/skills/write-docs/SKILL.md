@@ -3,7 +3,7 @@ name: write-docs
 description: Rules for writing docs - the README, anything in docs/, or a skill in .claude/skills/. Use before adding or changing any of these, including when you add a new skill.
 ---
 
-CLAUDE.md's rules for every task still apply: plain English, and update the README when what the user sees changes.
+AGENTS.md's rules for every task still apply: plain English, and update the README when what the user sees changes.
 
 ## README or `docs/`?
 
@@ -18,4 +18,4 @@ Function names, file contents, how the code works step by step: anyone can find 
 A skill holds rules that matter for only some tasks. An agent reads a skill when its description matches the task, so:
 
 - Write a description that says plainly when to use the skill. Name the files or the kind of task it covers.
-- Add a line for the skill to the skills list in CLAUDE.md.
+- Add a line for the skill to the skills list in AGENTS.md.

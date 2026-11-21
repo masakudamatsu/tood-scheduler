@@ -1,6 +1,6 @@
 ---
 name: suggest-commit
-description: Write a commit message for the current changes and show it, without committing. Use when asked to suggest or draft a commit message, and when a task is done (CLAUDE.md asks for a suggested message then).
+description: Write a commit message for the current changes and show it, without committing. Use when asked to suggest or draft a commit message, and when a task is done (AGENTS.md asks for a suggested message then).
 ---
 
 Write a commit message for the changes, following the rules below. Show it in a code block. Never run `git commit`: Masa runs the commit himself. If the changes would be better as more than one commit, say which files go in each and give a message for each.

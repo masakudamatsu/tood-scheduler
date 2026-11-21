@@ -44,3 +44,8 @@ The main parts of the app, where each one lives, and the decision records (in [a
   - adrs: [0007](adrs/0007-tests-check-class-names.md)
 - **Pre-commit hook**: [.githooks/pre-commit](../.githooks/pre-commit). Runs lint and the type check before each commit.
   - adrs: [0013](adrs/0013-pre-commit-hook.md)
+
+## Rules for agents
+
+- **Agent rules**: [AGENTS.md](../AGENTS.md), and [CLAUDE.md](../CLAUDE.md), which only imports it.
+  - adrs: [0014](adrs/0014-every-decision-gets-a-record.md), [0016](adrs/0016-docs-not-what-code-says.md), [0017](adrs/0017-claude-md-imports-agents-md.md)

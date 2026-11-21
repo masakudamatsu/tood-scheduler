@@ -1,15 +1,6 @@
 # To Do Scheduler
 
-To Do Scheduler is a web application to help the user plan and remember what to do each day **without overloading themselves with too many tasks**. 
-
-## Features
-
-Specifically, the app has the following features:
-1. The user sees the list of "what to do" each day by scrolling down, just like Google Calendar mobile app's "Schedule" view.
-2. Each "what to do" has a checkbox. The user ticks it when the "what to do" is done.
-3. The user can tap each "what to do" to see a note associated with it. If the user pastes an URL onto the note, the URL automatically become a link so that the user can later click it to see the associated pieces of information on the task on an external webpage.
-4. The user can add a date to each "what to do". The user can also add an estimated number of hours to complete it. The user sets the maximum number of hours for "what to do" each day (8 hours by default). If the total number of hours of "what to do" on a date exceeds the maximum number of hours, the list of "what to do" on that date is bordered with a red rectangle. This way, the user can notice his/her schedule overloaded with what to do on some dates. This is the core feature (see **Never do** below).
-5. The user can drag and drop "what to do" (represented as a card) to a different date so that the change of a date will be easy.
+To Do Scheduler is a web app that helps the user plan what to do each day **without overloading themselves with too many tasks**. The [README](README.md) lists what the user can do with it.
 
 ## Rules for every task
 

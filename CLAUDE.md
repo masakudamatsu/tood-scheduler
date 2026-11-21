@@ -13,7 +13,7 @@ Specifically, the app has the following features:
 
 ## Rules for every task
 
-Decisions that the code doesn't explain are in @docs/decisions.md. Read it before changing behavior, and add an entry when a task involves a choice like that. **Don't add an entry if the code already says it.** If a short code comment can hold the reason, write the comment instead.
+Decisions are recorded in `docs/adrs/`, one file per decision. Before a task, list `docs/adrs/` and read the records that matter for the task. **When a task involves a decision, write a record** by copying `docs/adrs/0000-template.md`. A code comment can point to the record, but doesn't hold the reason instead of it. If a decision changes, write a new record and mark the old one "superseded by" it.
 
 - **Tests first.** For a new feature or a bug fix, write a Playwright test that fails (or update the existing tests so they fail with the current codebase), then write the code to make it pass. Finish only when `npm run verify` passes. Tests must never need Supabase or a network connection.
 - **Adding a field to a task** means updating all of these together:

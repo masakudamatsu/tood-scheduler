@@ -1,0 +1,4 @@
+#!/bin/sh
+# Runs before each commit. Tests are too slow here; CI runs them.
+# Skip once with: git commit --no-verify
+npm run lint && npx tsc --noEmit

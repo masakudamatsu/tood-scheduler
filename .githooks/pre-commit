@@ -1,4 +1,7 @@
 #!/bin/sh
-# Runs before each commit. Tests are too slow here; CI runs them.
+# Runs before each commit, so lint and type errors show up in seconds
+# instead of minutes later on CI. It takes about 5 seconds (2026-11-21).
+# Revisit if a commit starts taking more than 10 seconds.
+# Tests are too slow here; CI runs them.
 # Skip once with: git commit --no-verify
 npm run lint && npx tsc --noEmit

@@ -13,7 +13,7 @@ Masa has said yes to committing, pushing and opening a pull request for this iss
    - No such label → pick one of the three from what the issue asks for.
    - `<short-slug>`: 2–4 words from the title in kebab-case, for example `feat/3-weekly-limit`.
 5. If the issue is unclear or could mean very different things, ask Masa before writing code.
-6. Do the task by following CLAUDE.md: tests first, then code. `npm run verify` must pass. Update the README and `docs/decisions.md` when the rules say so.
+6. Do the task by following CLAUDE.md: tests first, then code. `npm run verify` must pass. Update the README and write records in `docs/adrs/` when the rules say so.
 7. Commit by following `.claude/skills/commit/SKILL.md`. Put `Fixes #<N>` in the footer.
 8. Push: `git push -u origin HEAD`.
 9. Open the pull request with `gh pr create --base main --title "<commit-style title>" --body-file -`, passing the body with a heredoc. Write the body in plain English with these sections:

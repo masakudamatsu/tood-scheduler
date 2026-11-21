@@ -15,7 +15,7 @@ Specifically, the app has the following features:
 
 Decisions that the code doesn't explain are in @docs/decisions.md. Read it before changing behavior, and add an entry when a task involves a choice like that. **Don't add an entry if the code already says it.** If a short code comment can hold the reason, write the comment instead.
 
-- **Tests first.** For a new feature or a bug fix, write a Playwright test that fails (or update the existing tests so they fail with the current codebase), then write the code to make it pass. Finish only when `npm test`, `npm run lint` and `npx tsc --noEmit` all pass. Tests must never need Supabase or a network connection.
+- **Tests first.** For a new feature or a bug fix, write a Playwright test that fails (or update the existing tests so they fail with the current codebase), then write the code to make it pass. Finish only when `npm run verify` passes. Tests must never need Supabase or a network connection.
 - **Adding a field to a task** means updating all of these together:
   1. `src/lib/types.ts`
   2. `src/lib/store/local.ts`, with a default for data saved before the field existed

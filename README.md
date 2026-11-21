@@ -48,6 +48,10 @@ npm test
 
 There's one Playwright test per feature, in `tests/`. Tests start their own server in local mode on port 3100, so they never touch your real tasks and don't need Supabase.
 
+`npm run verify` runs every check in one go: lint (a style and mistake checker), the type check and the tests. GitHub runs the same command on every pull request and every push to `main`.
+
+Before each commit, a hook (a script Git runs for you) checks lint and types. `npm install` turns it on. To skip it once, use `git commit --no-verify`.
+
 ## 4. Deploy to Vercel (about 5 minutes)
 
 1. Push this folder to GitHub:
@@ -87,6 +91,8 @@ There's one Playwright test per feature, in `tests/`. Tests start their own serv
 | `src/lib/store/` | Saving data: `supabase.ts` (real) and `local.ts` (browser only) |
 | `supabase/schema.sql` | Database tables and access rules |
 | `tests/` | Playwright tests, one per feature |
+| `.githooks/pre-commit` | Checks lint and types before each commit |
+| `.github/workflows/ci.yml` | Runs `npm run verify` on GitHub |
 
 ## Not built yet
 

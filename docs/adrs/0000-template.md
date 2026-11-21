@@ -20,3 +20,5 @@ What stays simple, and what gets harder. Keep it short: a few bullet points or s
 ---
 
 Write a record when someone changing the code later might ask "why is it like this?" and the code can't answer. Don't write one just to note that a change shipped: git history already does that.
+
+After you write a record, add its link to the `adrs` list of each building block it shapes in [docs/primitives.md](../primitives.md).

@@ -10,8 +10,7 @@ Decisions are recorded in `docs/adrs/`, one file per decision. Before a task, li
 - **Changing what the app saves** (a task's fields, a table, `supabase/schema.sql`)? Use the `change-database` skill first.
 - **Plain English** in the README, docs, UI text and explanations: everyday words, short sentences. Define a technical term once when you need it.
 - **Update the README** when a feature changes what the user sees.
-- **README or `docs/`?** The README is for someone who wants to use or run the project. `docs/` is for someone changing the code: decision records (`docs/adrs/`), building blocks and guides.
-- **Don't write in docs what the code already says.** Function names, file contents, how the code works step by step: anyone can find these by reading the code, and a copy goes out of date when the code changes. Docs hold what the code can't say: why, what we decided against, how to run things, and where to look ([0016](docs/adrs/0016-docs-not-what-code-says.md)).
+- **Writing docs** (the README, `docs/`, a skill)? Use the `write-docs` skill first.
 
 ## Never do
 

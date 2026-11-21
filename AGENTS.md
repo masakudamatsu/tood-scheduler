@@ -13,11 +13,12 @@ A map for coding agents. The rules live in [CLAUDE.md](CLAUDE.md). Read it first
 
 ## Skills
 
-Step-by-step guides in [.claude/skills/](.claude/skills/):
+In [.claude/skills/](.claude/skills/). Each skill holds the steps or rules for one kind of task:
 
 - [work-on-issue](.claude/skills/work-on-issue/SKILL.md): from a GitHub issue to a pull request.
 - [address-review](.claude/skills/address-review/SKILL.md): fix a pull request after review.
 - [change-database](.claude/skills/change-database/SKILL.md): adding a field to a task, adding a table, or changing `supabase/schema.sql`.
+- [write-docs](.claude/skills/write-docs/SKILL.md): writing the README, `docs/`, or a skill.
 - [commit](.claude/skills/commit/SKILL.md) and [suggest-commit](.claude/skills/suggest-commit/SKILL.md): commit message rules.
 
 ## The one check

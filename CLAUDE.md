@@ -4,9 +4,8 @@ To Do Scheduler is a web app that helps the user plan what to do each day **with
 
 ## Rules for every task
 
-Decisions are recorded in `docs/adrs/`, one file per decision. Before a task, list `docs/adrs/` and read the records that matter for the task. Also read [docs/primitives.md](docs/primitives.md): it lists the app's building blocks and the records that shape each one. Use an existing building block instead of writing a new one that does the same job, and before you change a block, read the records listed under it. **When a task involves a decision, write a record** by copying `docs/adrs/0000-template.md`.
+Decisions are recorded in `docs/adrs/`, one file per decision. Before a task, list `docs/adrs/` and read the records that matter for the task. Also read [docs/primitives.md](docs/primitives.md): it lists the app's building blocks, and says how to use and update the list. **When a task involves a decision, write a record** by copying `docs/adrs/0000-template.md`.
 
-- **Keep `docs/primitives.md` up to date.** A pull request that adds or reshapes a building block, or adds or changes a record in `docs/adrs/`, updates `docs/primitives.md` in the same pull request.
 - **Tests first.** For a new feature or a bug fix, write a Playwright test that fails (or update the existing tests so they fail with the current codebase), then write the code to make it pass. Finish only when `npm run verify` passes.
 - **Adding a field to a task** means updating all of these together:
   1. `src/lib/types.ts`

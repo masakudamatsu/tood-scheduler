@@ -1,6 +1,10 @@
 # Building blocks
 
-The main parts of the app, where each one lives, and the decision records (in [adrs/](adrs/)) that shape it. [CLAUDE.md](../CLAUDE.md) says how to use and update this list.
+The main parts of the app, where each one lives, and the decision records (in [adrs/](adrs/)) that shape it.
+
+- **Use an existing block** instead of writing a new one that does the same job.
+- **Before you change a block, read the records listed under it.**
+- **Keep this list up to date.** A pull request that adds or reshapes a building block, or adds or changes a record in [adrs/](adrs/), updates this list in the same pull request.
 
 ## Data
 

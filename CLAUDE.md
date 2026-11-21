@@ -25,6 +25,7 @@ Decisions that the code doesn't explain are in @docs/decisions.md. Read it befor
 - **Tell Masa when the database must be updated.** If `schema.sql` changes, he needs to run it again in Supabase's SQL Editor.
 - **Plain English** in the README, docs, UI text and explanations: everyday words, short sentences. Define a technical term once when you need it.
 - **Update the README** when a feature changes what the user sees.
+- **README or `docs/`?** The README is for someone who wants to use or run the project. `docs/` is for someone changing the code: decision records (`docs/adrs/`), building blocks and guides.
 
 ## Git
 

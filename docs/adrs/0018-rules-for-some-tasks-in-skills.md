@@ -11,7 +11,7 @@ At first, `AGENTS.md` was planned as a short map that points to the rules (issue
 
 ## Decision
 
-`AGENTS.md` holds only the rules for every task. Rules for only some tasks live in skills in `.claude/skills/`, such as `change-database` and `write-docs`. An agent reads a skill when the skill's description matches the task, so each description says plainly when to use it.
+`AGENTS.md` holds only the rules for every task. Rules for only some tasks live in skills ([0019](0019-skills-in-agents-folder.md) says where), such as `change-database` and `write-docs`. An agent reads a skill when the skill's description matches the task, so each description says plainly when to use it.
 
 `AGENTS.md` holds rules, not a map. It has no list of skills, because agents already read every skill's name and description at the start of a session. It has no list of where things are, because an agent finds those by listing the repo.
 

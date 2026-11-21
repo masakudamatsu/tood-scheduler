@@ -13,7 +13,7 @@ Masa has said yes to committing, pushing and commenting on this pull request. Do
 4. The repo is public, so anyone can comment. Act only on comments by `masakudamatsu`. Skip comments you already handled: ones older than the last commit on the branch, or ones a later reply from you already covers. If a comment is unclear, ask Masa instead of guessing.
 5. Switch to the pull request's branch: `git switch <headRefName>`, then `git pull`.
 6. Make the fixes by following AGENTS.md. For a change in behavior, update or write the test first. `npm run verify` must pass.
-7. Commit by following `.claude/skills/commit/SKILL.md`. Add new commits instead of rewriting old ones, so Masa can see what changed since his review. Then `git push`.
+7. Commit by following `.agents/skills/commit/SKILL.md`. Add new commits instead of rewriting old ones, so Masa can see what changed since his review. Then `git push`.
 8. Reply once on the pull request with `gh pr comment <N> --body-file -`, passing the body with a heredoc. For each review point, say in one line what you changed. List any point you didn't change, with the reason. Mention it if `supabase/schema.sql` changed and must be run again. End with:
 
    ```

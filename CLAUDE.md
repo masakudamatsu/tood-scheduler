@@ -7,13 +7,7 @@ To Do Scheduler is a web app that helps the user plan what to do each day **with
 Decisions are recorded in `docs/adrs/`, one file per decision. Before a task, list `docs/adrs/` and read the records that matter for the task. Also read [docs/primitives.md](docs/primitives.md): it lists the app's building blocks, and says how to use and update the list. **When a task involves a decision, write a record** by copying `docs/adrs/0000-template.md`.
 
 - **Tests first.** For a new feature or a bug fix, write a Playwright test that fails (or update the existing tests so they fail with the current codebase), then write the code to make it pass. Finish only when `npm run verify` passes.
-- **Adding a field to a task** means updating all of these together:
-  1. `src/lib/types.ts`
-  2. `src/lib/store/local.ts`, with a default for data saved before the field existed
-  3. `COLUMNS` and `normalize()` in `src/lib/store/supabase.ts`
-  4. `supabase/schema.sql`: the `create table`, plus an `alter table ... add column if not exists` line for existing databases
-- **A new table in `supabase/schema.sql`** needs RLS turned on, policies, and a `grant ... to authenticated` line ([0012](docs/adrs/0012-new-tables-not-exposed.md)).
-- **Tell Masa when the database must be updated.** If `schema.sql` changes, he needs to run it again in Supabase's SQL Editor.
+- **Changing what the app saves** (a task's fields, a table, `supabase/schema.sql`)? Use the `change-database` skill first.
 - **Plain English** in the README, docs, UI text and explanations: everyday words, short sentences. Define a technical term once when you need it.
 - **Update the README** when a feature changes what the user sees.
 - **README or `docs/`?** The README is for someone who wants to use or run the project. `docs/` is for someone changing the code: decision records (`docs/adrs/`), building blocks and guides.

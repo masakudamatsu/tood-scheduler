@@ -29,15 +29,19 @@ Open http://localhost:3000. Without Supabase keys the app runs in **local mode**
 1. Go to https://supabase.com, sign up, and click **New project**. Pick any name, set a database password, and pick the region closest to you.
 2. When the project is ready, open **SQL Editor → New query**, paste everything in `supabase/schema.sql`, and click **Run**. (If you ran an older copy of this file before, run it again. It's safe to re-run, and it adds the column that stores each task's order.) This creates the `tasks` and `settings` tables. It also turns on Row Level Security, a database rule that lets each signed-in person see only their own rows.
 3. Open **Authentication → URL Configuration**:
-   - **Site URL:** `http://localhost:3000` for now (change it to your Vercel link after step 4).
-   - **Redirect URLs:** add `http://localhost:3000`. Add your Vercel link later too.
+   - **Site URL:** `http://localhost:3000` for now (change it to your Vercel link at Step 4 Item 4 below).
+   - **Redirect URLs:** add `http://localhost:3000`. Later, add your Vercel links at Step 4 Items 4 and 5 below.
+
+   Supabase only sends a sign-in link back to an address on this list. If an address is missing, there's no error: the link quietly sends you to the Site URL instead. So whenever you use a new address, add it here.
 4. Click **Connect** at the top of the project. Copy the two lines it shows: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. (The publishable key is safe to use in the browser. It replaces what Supabase used to call the "anon" key.)
 5. In this folder, copy `.env.local.example` to `.env.local` and paste in the two values.
-6. Restart `npm run dev`. You'll now see a sign-in screen. Enter your email, open the link Supabase emails you, and you're in.
+6. Restart `npm run dev`. You'll now see a sign-in screen. Enter your email, open the link Supabase emails you (on any device), and you're in. See [docs/adrs/0003](docs/adrs/0003-implicit-sign-in-flow.md).
 
-> Supabase's built-in email service only sends a few emails per hour. That's fine for one person. If you hit the limit, wait an hour.
+> Supabase's built-in email service sends only two emails per hour. That's fine for one person. If you hit the limit, wait an hour. For more people, set up custom SMTP (a separate email-sending service). See [docs/adrs/0011](docs/adrs/0011-built-in-email-service.md).
 
-> Optional: after your first sign-in, you can stop strangers from making accounts. Go to **Authentication → Sign In / Providers** and turn off **Allow new users to sign up**. Even if you leave it on, nobody can see your tasks.
+> Supabase's **Automatically expose new tables** setting is off in this project. So the browser can only reach a table after a `grant` line opens it to signed-in users. That's why `supabase/schema.sql` has one for each table. If you add a table, add its `grant` line too. See [docs/adrs/0012](docs/adrs/0012-new-tables-not-exposed.md).
+
+> Optional: after your first sign-in, you can stop strangers from making accounts. Go to **Authentication → Sign In / Providers** and turn off **Allow new users to sign up**. Even if you leave it on, nobody can see your tasks. See [docs/adrs/0004](docs/adrs/0004-open-sign-up.md).
 
 ## 3. Run the tests
 
@@ -71,6 +75,8 @@ Before each commit, a hook (a script Git runs for you) checks lint and types. `n
       git push -u origin main
       ```
    If you typed the wrong address, fix it with `git remote set-url origin <correct-address>`, then check it with `git remote -v`.
+
+   After this first push, protect `main`: this project expects every change to reach `main` through a pull request. On GitHub, open your repository's **Settings → Branches**, add a rule for `main`, and turn on **Require a pull request before merging**. From then on, pushing straight to `main` fails. See [docs/adrs/0010](docs/adrs/0010-main-is-protected.md).
 2. On https://vercel.com, click **Add New → Project** and import the repository.
 3. Under **Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` with the same values as in `.env.local`. Click **Deploy**.
 4. Copy your new link (for example `https://todo-scheduler-xyz.vercel.app`). Back in Supabase **Authentication → URL Configuration**, set it as the **Site URL** and add it to **Redirect URLs**.

@@ -38,11 +38,15 @@ We do it this way because restoring in place would mean deleting the live rows f
 
 ### Switch the app to the new project
 
-7. **Set up sign-in.** In the new project, open **Authentication → URL Configuration**. Set the **Site URL** to the app's Vercel link, and add the same **Redirect URLs** as the old project: `http://localhost:3000`, the Vercel link, and the preview pattern (see [README](../README.md) step 2, item 3, and step 4, items 4 and 5). Copy the other settings you changed by hand too, such as **Allow new users to sign up**.
+7. **Set up sign-in.** In the new project, open **Authentication → URL Configuration**. Set the **Site URL** to the app's Vercel link, and add the same **Redirect URLs** as the old project: `http://localhost:3000`, the Vercel link, and the preview pattern (see [README](../README.md) step 2, item 3, and step 4, items 4 and 5). Then make the other settings match the old project:
+   - **Automatically expose new tables** must be off ([0012](adrs/0012-new-tables-not-exposed.md)). A new project may have it on. Supabase may ask about it when you make the project; if not, search the dashboard for "expose".
+   - **Allow new users to sign up** (**Authentication → Sign In / Providers**): the same as in the old project ([0004](adrs/0004-open-sign-up.md)).
+   - Anything else you changed by hand in the old project, such as email templates.
 8. **Copy the new keys.** Click **Connect** and copy `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Put them in `.env.local`, and in Vercel under **Settings → Environment Variables**.
 9. **Redeploy.** In Vercel, open **Deployments**, and on the latest one choose **Redeploy**. The app only picks up new values when it's built again.
-10. **Tell users to sign in again.** Their accounts and tasks are back, but the app now talks to a new project, so everyone is signed out. They sign in with the same email, as before.
-11. **Tidy up.** Once the app works, pause the old project, so it doesn't use one of your two free active projects. Delete the downloaded backup file too: it's encrypted, but you don't need a second copy.
+10. **Point the backups at the new project.** On GitHub, open this repo's **Settings → Secrets and variables → Actions**, and update `SUPABASE_DB_URL` to the new project's **Session pooler** address (from step 4). Then open **Actions → Backup** and click **Run workflow**, and check it succeeds. Until you do this, the backups keep copying the old project, and once you pause the old project they fail.
+11. **Tell users to sign in again.** Their accounts and tasks are back, but the app now talks to a new project, so everyone is signed out. They sign in with the same email, as before.
+12. **Tidy up.** Once the app works and a backup of the new project has succeeded, pause the old project, so it doesn't use one of your two free active projects. Delete the downloaded backup file too: it's encrypted, but you don't need a second copy.
 
 ## Practise first
 

@@ -109,8 +109,10 @@ The workflow runs only in the original repo, not in copies of it. To get the dat
 | `.github/workflows/ci.yml` | Runs `npm run verify` on GitHub |
 | `.coderabbit.yaml` | How CodeRabbit, an AI reviewer, reviews each pull request |
 | `.github/workflows/backup.yml` | Backs up the database to Cloudflare R2 |
+| `.github/workflows/update-skills.yml` | Updates the skills it names (now only `modern-web-guidance`) once a week |
 | `scripts/backup-dump.sh` | Dumps the database for the backup |
 | `scripts/restore-backup.sh` | Loads a backup into an empty database |
+| `scripts/update-skills.sh` | Updates the skills the workflow names |
 
 ## Not built yet
 

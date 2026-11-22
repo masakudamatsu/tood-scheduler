@@ -4,6 +4,8 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Lets the Update skills workflow start CI on its pull request (docs/adrs/0028).
+  workflow_dispatch:
 
 jobs:
   verify:

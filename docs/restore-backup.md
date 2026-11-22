@@ -27,7 +27,7 @@ We do it this way because restoring in place would mean deleting the live rows f
 2. **Find the backup file.** On https://dash.cloudflare.com, open **R2 → your backups bucket**. Pick the newest file from before the problem started.
 3. **Download it.** Click the file, then **Download**.
 4. **Get the new project's database address.** In the new project, click **Connect → Session pooler**, and put your database password in it.
-5. **Run the restore script** from this folder. Put the address in quotes:
+5. **Run the restore script** from this repository's folder (the one with `README.md` and `scripts/`), so that `scripts/restore-backup.sh` points to the script. Put the address in quotes:
    ```bash
    scripts/restore-backup.sh ~/Downloads/2026-11-22T03-00-00JST.sql.age "<database address>"
    ```
@@ -38,11 +38,15 @@ We do it this way because restoring in place would mean deleting the live rows f
 
 ### Switch the app to the new project
 
-7. **Set up sign-in.** In the new project, open **Authentication → URL Configuration**. Set the **Site URL** to the app's Vercel link, and add the same **Redirect URLs** as the old project: `http://localhost:3000`, the Vercel link, and the preview pattern (see [README](../README.md) step 2, item 3, and step 4, items 4 and 5). Copy the other settings you changed by hand too, such as **Allow new users to sign up**.
+7. **Set up sign-in.** In the new project, open **Authentication → URL Configuration**. Set the **Site URL** to the app's Vercel link, and add the same **Redirect URLs** as the old project: `http://localhost:3000`, the Vercel link, and the preview pattern (see [README](../README.md) step 2, item 3, and step 4, items 4 and 5). Then make the other settings match the old project:
+   - **Automatically expose new tables** must be off ([0012](adrs/0012-new-tables-not-exposed.md)). A new project may have it on. Supabase may ask about it when you make the project; if not, search the dashboard for "expose".
+   - **Allow new users to sign up** (**Authentication → Sign In / Providers**): the same as in the old project ([0004](adrs/0004-open-sign-up.md)).
+   - Anything else you changed by hand in the old project, such as email templates.
 8. **Copy the new keys.** Click **Connect** and copy `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Put them in `.env.local`, and in Vercel under **Settings → Environment Variables**.
 9. **Redeploy.** In Vercel, open **Deployments**, and on the latest one choose **Redeploy**. The app only picks up new values when it's built again.
-10. **Tell users to sign in again.** Their accounts and tasks are back, but the app now talks to a new project, so everyone is signed out. They sign in with the same email, as before.
-11. **Tidy up.** Once the app works, pause the old project, so it doesn't use one of your two free active projects. Delete the downloaded backup file too: it's encrypted, but you don't need a second copy.
+10. **Point the backups at the new project.** On GitHub, open this repo's **Settings → Secrets and variables → Actions**, and update `SUPABASE_DB_URL` to the new project's **Session pooler** address (from step 4). Then open **Actions → Backup** and click **Run workflow**, and check it succeeds. Until you do this, the backups keep copying the old project, and once you pause the old project they fail.
+11. **Tell users to sign in again.** Their accounts and tasks are back, but the app now talks to a new project, so everyone is signed out. They sign in with the same email, as before.
+12. **Tidy up.** Once the app works and a backup of the new project has succeeded, pause the old project, so it doesn't use one of your two free active projects. Delete the downloaded backup file too: it's encrypted, but you don't need a second copy.
 
 ## Practise first
 
@@ -54,6 +58,20 @@ npx supabase init
 npx supabase start
 ```
 
-Then follow steps 2 to 6 above, with `postgresql://postgres:postgres@127.0.0.1:54322/postgres` as the address. When you're done, run `npx supabase stop --no-backup` to throw it away.
+Then follow steps 2 to 6 above, with two changes:
+
+- **Step 4:** the address is usually `postgresql://postgres:postgres@127.0.0.1:54322/postgres`. To make sure, run `npx supabase status` in `/tmp/restore-practice` and use the **DB URL** it shows.
+- **Step 5:** go back to this repository's folder first (`cd` to it), because you're still in `/tmp/restore-practice`.
+- **Step 6:** for a closer look, open Supabase Studio (the local Supabase's dashboard) in your browser: usually http://127.0.0.1:54323, or the **Studio URL** that `npx supabase status` shows. It needs no sign-in. Check that **Authentication → Users** lists the right email addresses, and that **Table Editor → tasks** has task titles you recognise.
+
+When you're done, go back to `/tmp/restore-practice` and run `npx supabase stop --no-backup` to throw the practice Supabase away.
+
+If `npx supabase start` fails:
+
+- **"docker: command not found":** the `docker` command isn't where your terminal looks for it. Run `docker --version` to check. To fix it, open Docker Desktop → **Settings → Advanced**, choose **User** and click **Apply & restart**, then choose **System (requires password)** and click **Apply & restart** again. Switching back and forth makes Docker Desktop put the `docker` command in `/usr/local/bin` again, even if **System** was already chosen.
+- **"port is already allocated":** another project's local Supabase is running and using the same ports. Stop it with `npx supabase stop` in that project's folder. Its data is kept, and `npx supabase start` there brings it back. Don't use the stop button in Docker Desktop: it can spin forever on a Supabase project. If you don't know the folder, stop its containers by name instead, replacing `<project>` with the name Docker Desktop shows:
+  ```bash
+  docker stop $(docker ps -q --filter name=_<project>)
+  ```
 
 You can also make a backup file from a local Supabase, to test changes to the backup itself: `scripts/backup-dump.sh <database address> backup.sql` (it needs the Supabase CLI on your `PATH`).

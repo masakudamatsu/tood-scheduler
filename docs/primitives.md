@@ -44,6 +44,8 @@ The main parts of the app, where each one lives, and the decision records (in [a
   - adrs: [0007](adrs/0007-tests-check-class-names.md)
 - **Pre-commit hook**: [.githooks/pre-commit](../.githooks/pre-commit). Runs lint and the type check before each commit.
   - adrs: [0013](adrs/0013-pre-commit-hook.md)
+- **CodeRabbit review**: [.coderabbit.yaml](../.coderabbit.yaml). An AI reviewer that comments on every pull request into `main` and checks it against the rules for agents.
+  - adrs: [0026](adrs/0026-coderabbit-reviews-pull-requests.md)
 
 ## Backups
 

@@ -25,7 +25,7 @@ concurrency:
 jobs:
   backup:
     # Forks have no secrets, so the backup would only fail there.
-    if: github.repository == 'masakudamatsu/todo-scheduler'
+    if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:

@@ -45,6 +45,11 @@ The main parts of the app, where each one lives, and the decision records (in [a
 - **Pre-commit hook**: [.githooks/pre-commit](../.githooks/pre-commit). Runs lint and the type check before each commit.
   - adrs: [0013](adrs/0013-pre-commit-hook.md)
 
+## Backups
+
+- **Backup workflow**: [.github/workflows/backup.yml](../.github/workflows/backup.yml) and [scripts/backup-dump.sh](../scripts/backup-dump.sh). Saves the whole database, encrypted, to Cloudflare R2. How to restore: [restore-backup.md](restore-backup.md).
+  - adrs: [0020](adrs/0020-backups-in-cloudflare-r2.md), [0021](adrs/0021-r2-account-api-token.md), [0022](adrs/0022-backups-encrypted-with-age.md), [0023](adrs/0023-backups-kept-90-days.md), [0024](adrs/0024-backup-includes-auth-users.md)
+
 ## Rules for agents
 
 - **Agent rules**: [AGENTS.md](../AGENTS.md) (rules for every task), [CLAUDE.md](../CLAUDE.md) (only imports AGENTS.md) and [.agents/skills/](../.agents/skills/) (rules and steps for only some tasks, with a symlink to each in `.claude/skills/`).

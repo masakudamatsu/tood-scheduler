@@ -1,0 +1,73 @@
+name: Backup
+
+# Saves the whole database, encrypts it, and uploads it to Cloudflare R2.
+# Runs after every merge to main, once a day, and by hand from the Actions tab.
+# Why R2, why encrypted, and how long backups are kept: docs/adrs/0020 to 0024.
+# How to restore: docs/restore-backup.md.
+#
+# This repo is public, so these logs are too. Nothing here may print the data.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * *" # 03:00 UTC every day
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Two backups never run at the same time. A new one waits for the last.
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    # Forks have no secrets, so the backup would only fail there.
+    if: github.repository == 'masakudamatsu/todo-scheduler'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 3.2.0
+
+      - name: Install age
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends age > /dev/null
+
+      - name: Dump the database
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: scripts/backup-dump.sh "$SUPABASE_DB_URL" "$RUNNER_TEMP/backup.sql"
+
+      - name: Encrypt the dump
+        env:
+          AGE_PUBLIC_KEY: ${{ secrets.AGE_PUBLIC_KEY }}
+        run: |
+          age --recipient "$AGE_PUBLIC_KEY" --output "$RUNNER_TEMP/backup.sql.age" "$RUNNER_TEMP/backup.sql"
+          rm "$RUNNER_TEMP/backup.sql"
+
+      - name: Upload to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          # R2 doesn't accept every checksum newer AWS CLIs add by default.
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          name="$(date -u +%Y-%m-%dT%H-%M-%SZ).sql.age"
+          aws s3 cp "$RUNNER_TEMP/backup.sql.age" "s3://$R2_BUCKET/$name" \
+            --endpoint-url "$R2_ENDPOINT" --only-show-errors
+          echo "Uploaded $name"
+
+      - name: Delete local copies
+        if: always()
+        run: rm -f "$RUNNER_TEMP/backup.sql" "$RUNNER_TEMP/backup.sql.age"

@@ -1,9 +1,15 @@
 # How CodeRabbit reviews pull requests in this repo. Why we use it: docs/adrs/0026-coderabbit-reviews-pull-requests.md
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: en-US
-tone_instructions: "Write in plain English: everyday words, short sentences. Define a technical term once when you need it."
+tone_instructions: "Plain English: everyday words, short sentences. Say what's wrong, why it matters, and what to change. Explain setting names and labels in words. Write for someone who doesn't know CodeRabbit."
 
 reviews:
+  in_progress_fortune: false
+  sequence_diagrams: false
+  estimate_code_review_effort: false
+  related_prs: false
+  suggested_labels: false
+  suggested_reviewers: false
   auto_review:
     enabled: true
   path_instructions:

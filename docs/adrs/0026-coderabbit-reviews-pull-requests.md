@@ -11,6 +11,8 @@ The repo is moving to autopilot: agents ship most changes, and Masa makes the pr
 
 CodeRabbit (an AI code reviewer, installed as a GitHub app) reviews every pull request. Its settings are in [.coderabbit.yaml](../../.coderabbit.yaml), so a change to them goes through a pull request like any other change. It reads AGENTS.md and the skills as rules to check. And it looks closely when a test's expected result changes in the same pull request as the code it tests.
 
+It writes in plain English, and we turn off the parts of its comments that nobody here needs: sequence diagrams, effort estimates, related pull requests, suggested labels and reviewers, and the fortune shown while it works. Its first review was hard to read because those parts buried the one point that mattered.
+
 ## Consequences
 
 - Each pull request gets a second review, and Masa doesn't have to write it.

@@ -27,7 +27,7 @@ We do it this way because restoring in place would mean deleting the live rows f
 2. **Find the backup file.** On https://dash.cloudflare.com, open **R2 → your backups bucket**. Pick the newest file from before the problem started.
 3. **Download it.** Click the file, then **Download**.
 4. **Get the new project's database address.** In the new project, click **Connect → Session pooler**, and put your database password in it.
-5. **Run the restore script** from this folder. Put the address in quotes:
+5. **Run the restore script** from this repository's folder (the one with `README.md` and `scripts/`), so that `scripts/restore-backup.sh` points to the script. Put the address in quotes:
    ```bash
    scripts/restore-backup.sh ~/Downloads/2026-11-22T03-00-00JST.sql.age "<database address>"
    ```
@@ -54,6 +54,20 @@ npx supabase init
 npx supabase start
 ```
 
-Then follow steps 2 to 6 above, with `postgresql://postgres:postgres@127.0.0.1:54322/postgres` as the address. When you're done, run `npx supabase stop --no-backup` to throw it away.
+Then follow steps 2 to 6 above, with two changes:
+
+- **Step 4:** the address is usually `postgresql://postgres:postgres@127.0.0.1:54322/postgres`. To make sure, run `npx supabase status` in `/tmp/restore-practice` and use the **DB URL** it shows.
+- **Step 5:** go back to this repository's folder first (`cd` to it), because you're still in `/tmp/restore-practice`.
+- **Step 6:** for a closer look, open Supabase Studio (the local Supabase's dashboard) in your browser: usually http://127.0.0.1:54323, or the **Studio URL** that `npx supabase status` shows. It needs no sign-in. Check that **Authentication → Users** lists the right email addresses, and that **Table Editor → tasks** has task titles you recognise.
+
+When you're done, go back to `/tmp/restore-practice` and run `npx supabase stop --no-backup` to throw the practice Supabase away.
+
+If `npx supabase start` fails:
+
+- **"docker: command not found":** the `docker` command isn't where your terminal looks for it. Run `docker --version` to check. To fix it, open Docker Desktop → **Settings → Advanced**, choose **User** and click **Apply & restart**, then choose **System (requires password)** and click **Apply & restart** again. Switching back and forth makes Docker Desktop put the `docker` command in `/usr/local/bin` again, even if **System** was already chosen.
+- **"port is already allocated":** another project's local Supabase is running and using the same ports. Stop it with `npx supabase stop` in that project's folder. Its data is kept, and `npx supabase start` there brings it back. Don't use the stop button in Docker Desktop: it can spin forever on a Supabase project. If you don't know the folder, stop its containers by name instead, replacing `<project>` with the name Docker Desktop shows:
+  ```bash
+  docker stop $(docker ps -q --filter name=_<project>)
+  ```
 
 You can also make a backup file from a local Supabase, to test changes to the backup itself: `scripts/backup-dump.sh <database address> backup.sql` (it needs the Supabase CLI on your `PATH`).

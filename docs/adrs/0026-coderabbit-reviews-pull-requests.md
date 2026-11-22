@@ -1,4 +1,4 @@
-# 0026: CodeRabbit reviews every pull request
+# 0026: CodeRabbit reviews every pull request into `main`
 
 - **Status:** accepted
 - **Date:** 2026-11-22
@@ -9,7 +9,7 @@ The repo is moving to autopilot: agents ship most changes, and Masa makes the pr
 
 ## Decision
 
-CodeRabbit (an AI code reviewer, installed as a GitHub app) reviews every pull request. Its settings are in [.coderabbit.yaml](../../.coderabbit.yaml), so a change to them goes through a pull request like any other change. It reads AGENTS.md and the skills as rules to check. And it looks closely when a test's expected result changes in the same pull request as the code it tests.
+CodeRabbit (an AI code reviewer, installed as a GitHub app) reviews every pull request into `main` once it's ready for review. It skips drafts, because a draft isn't ready and each push to one would use up a review: CodeRabbit allows about 10 an hour. It skips pull requests into other branches, because every task here branches from `main` and goes back into `main`. Its settings are in [.coderabbit.yaml](../../.coderabbit.yaml), so a change to them goes through a pull request like any other change. It reads AGENTS.md and the skills as rules to check. And it looks closely when a test's expected result changes in the same pull request as the code it tests.
 
 It writes in plain English, and we turn off the parts of its comments that nobody here needs: sequence diagrams, effort estimates, related pull requests, suggested labels and reviewers, and the fortune shown while it works. Its first review was hard to read because those parts buried the one point that mattered.
 

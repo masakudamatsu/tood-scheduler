@@ -72,14 +72,17 @@ jobs:
           Google and other authors update their skills often. This brings in their latest versions, so agents follow current advice. Made by the Update skills workflow (docs/adrs/0028).
           EOF
 
-          # Stop if the open update already has exactly these files.
+          # If the branch already has exactly these files, don't push it again.
+          # Still check the pull request and CI below: an earlier run may have
+          # pushed the branch and then failed to open the pull request or start CI.
           if git fetch -q origin "$BRANCH" 2>/dev/null && git diff --quiet FETCH_HEAD HEAD; then
-            echo "The open pull request already has this update."
-            exit 0
+            echo "The branch already has this update."
+            head="$(git rev-parse FETCH_HEAD)"
+          else
+            # The branch is made again from main each week, so it replaces last week's update.
+            git push --force origin "$BRANCH"
+            head="$(git rev-parse HEAD)"
           fi
-
-          # The branch is made again from main each week, so it replaces last week's update.
-          git push --force origin "$BRANCH"
 
           body="$RUNNER_TEMP/body.md"
           cat > "$body" <<EOF
@@ -114,4 +117,10 @@ jobs:
 
           # A pull request opened with this workflow's own token doesn't start other
           # workflows, so CI wouldn't run. Starting CI by hand is allowed.
-          gh workflow run ci.yml --ref "$BRANCH"
+          # Start it only if it hasn't run for this commit yet.
+          runs="$(gh run list --workflow ci.yml --commit "$head" --json databaseId --jq length)"
+          if [ "$runs" = 0 ]; then
+            gh workflow run ci.yml --ref "$BRANCH"
+          else
+            echo "CI has already run for this update."
+          fi

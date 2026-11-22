@@ -84,7 +84,7 @@ Before each commit, a hook (a script Git runs for you) checks lint and types. `n
 
 ## 5. Backups
 
-The free Supabase plan has no backups you can download. So a GitHub workflow saves the whole database after every merge to `main` and once a day. It encrypts the file and uploads it to a private Cloudflare R2 bucket (Cloudflare's file storage). Each file is deleted 90 days after upload.
+The free Supabase plan has no backups you can download. So a GitHub workflow saves the whole database after every merge to `main` and once a day at 03:00 Japan time. It encrypts the file and uploads it to a private Cloudflare R2 bucket (Cloudflare's file storage). Each file is deleted 90 days after upload.
 
 GitHub turns off scheduled workflows in a public repo after 60 days with no activity. The backup after each merge still runs.
 
@@ -109,6 +109,7 @@ The workflow runs only in the original repo, not in copies of it. To get the dat
 | `.github/workflows/ci.yml` | Runs `npm run verify` on GitHub |
 | `.github/workflows/backup.yml` | Backs up the database to Cloudflare R2 |
 | `scripts/backup-dump.sh` | Dumps the database for the backup |
+| `scripts/restore-backup.sh` | Loads a backup into an empty database |
 
 ## Not built yet
 

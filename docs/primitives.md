@@ -47,8 +47,10 @@ The main parts of the app, where each one lives, and the decision records (in [a
 
 ## Backups
 
-- **Backup workflow**: [.github/workflows/backup.yml](../.github/workflows/backup.yml) and [scripts/backup-dump.sh](../scripts/backup-dump.sh). Saves the whole database, encrypted, to Cloudflare R2. How to restore: [restore-backup.md](restore-backup.md).
-  - adrs: [0020](adrs/0020-backups-in-cloudflare-r2.md), [0021](adrs/0021-r2-account-api-token.md), [0022](adrs/0022-backups-encrypted-with-age.md), [0023](adrs/0023-backups-kept-90-days.md), [0024](adrs/0024-backup-includes-auth-users.md)
+- **Backup workflow**: [.github/workflows/backup.yml](../.github/workflows/backup.yml) and [scripts/backup-dump.sh](../scripts/backup-dump.sh). Saves the whole database, encrypted, to Cloudflare R2.
+  - adrs: [0020](adrs/0020-backups-in-cloudflare-r2.md), [0021](adrs/0021-r2-account-api-token.md), [0022](adrs/0022-backups-encrypted-with-age.md), [0023](adrs/0023-backups-kept-90-days.md), [0024](adrs/0024-backup-includes-auth-users.md), [0025](adrs/0025-backup-times-in-japan-time.md)
+- **Restore script**: [scripts/restore-backup.sh](../scripts/restore-backup.sh). Loads a backup file into an empty database. How to use it: [restore-backup.md](restore-backup.md).
+  - adrs: [0022](adrs/0022-backups-encrypted-with-age.md), [0024](adrs/0024-backup-includes-auth-users.md)
 
 ## Rules for agents
 

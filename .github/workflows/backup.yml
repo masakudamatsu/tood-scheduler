@@ -2,7 +2,7 @@ name: Backup
 
 # Saves the whole database, encrypts it, and uploads it to Cloudflare R2.
 # Runs after every merge to main, once a day, and by hand from the Actions tab.
-# Why R2, why encrypted, and how long backups are kept: docs/adrs/0020 to 0024.
+# Why R2, why encrypted, and how long backups are kept: docs/adrs/0020 to 0025.
 # How to restore: docs/restore-backup.md.
 #
 # This repo is public, so these logs are too. Nothing here may print the data.
@@ -11,7 +11,9 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 3 * * *" # 03:00 UTC every day
+    # 03:00 Japan time (18:00 UTC). Why Japan time: docs/adrs/0025.
+    # GitHub may start it a few minutes late.
+    - cron: "0 18 * * *"
   workflow_dispatch:
 
 permissions:
@@ -63,7 +65,8 @@ jobs:
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
-          name="$(date -u +%Y-%m-%dT%H-%M-%SZ).sql.age"
+          # Named by the time in Japan, for example 2026-11-22T03-00-00JST.sql.age.
+          name="$(TZ=Asia/Tokyo date +%Y-%m-%dT%H-%M-%S)JST.sql.age"
           aws s3 cp "$RUNNER_TEMP/backup.sql.age" "s3://$R2_BUCKET/$name" \
             --endpoint-url "$R2_ENDPOINT" --only-show-errors
           echo "Uploaded $name"

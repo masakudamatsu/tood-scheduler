@@ -13,6 +13,9 @@ reviews:
   # Reviews pull requests into main once they're ready, not drafts. Why: record 0026.
   auto_review:
     enabled: true
+  # Skips the modern-web-guidance skill: Google wrote it, and we copy it in unchanged. Why: record 0027.
+  path_filters:
+    - "!.agents/skills/modern-web-guidance/**"
   path_instructions:
     - path: "tests/**"
       instructions: |

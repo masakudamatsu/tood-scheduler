@@ -107,6 +107,7 @@ The workflow runs only in the original repo, not in copies of it. To get the dat
 | `tests/` | Playwright tests, one per feature |
 | `.githooks/pre-commit` | Checks lint and types before each commit |
 | `.github/workflows/ci.yml` | Runs `npm run verify` on GitHub |
+| `.coderabbit.yaml` | How CodeRabbit, an AI reviewer, reviews each pull request |
 | `.github/workflows/backup.yml` | Backs up the database to Cloudflare R2 |
 | `scripts/backup-dump.sh` | Dumps the database for the backup |
 | `scripts/restore-backup.sh` | Loads a backup into an empty database |

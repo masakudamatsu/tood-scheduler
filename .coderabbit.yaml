@@ -1,0 +1,33 @@
+# How CodeRabbit reviews pull requests in this repo. Why we use it: docs/adrs/0026-coderabbit-reviews-pull-requests.md
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+tone_instructions: "Write in plain English: everyday words, short sentences. Define a technical term once when you need it."
+
+reviews:
+  auto_review:
+    enabled: true
+  path_instructions:
+    - path: "tests/**"
+      instructions: |
+        Look closely when a test's expected result changes (an assertion, an expected value, or a test that's removed or skipped).
+        - Check that the same pull request changes the code the test covers, and that the linked issue asks for the new behaviour.
+        - Flag a test that's been loosened just so it passes, or an expected result that changed with no matching change in the app's code.
+        - The tests in tests/4-overload.spec.ts check the red border for overloaded days. That border is the app's core feature: flag anything that weakens what these tests check.
+        - Tests must run offline, with no Supabase and no network (AGENTS.md).
+    - path: "supabase/schema.sql"
+      instructions: |
+        Flag anything that removes or renames a table, column or policy, or deletes data. Only additions are allowed.
+        Every statement must be safe to run again on a database that already has data (`if not exists`, `drop policy if exists` before `create policy`, and so on).
+        Every table needs Row Level Security, and its own `grant ... to authenticated` line (docs/adrs/0012-new-tables-not-exposed.md).
+    - path: "src/**"
+      instructions: |
+        Flag anything that makes the red border for overloaded days weaker or harder to notice (see DaySection.tsx).
+        Flag server code (API routes, server actions) and any secret key in browser code, such as a `service_role` key (docs/adrs/0002-no-server-code.md).
+        If the change alters what the user sees, check that the README is updated in the same pull request.
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "AGENTS.md"
+      - ".agents/skills/**/SKILL.md"

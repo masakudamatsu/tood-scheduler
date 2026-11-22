@@ -19,6 +19,6 @@ We leave out the data of Supabase's other schemas, such as `storage` (uploaded f
 
 - A restore into a new Supabase project brings back the users, so they can sign in with the same email and see their tasks. A practice restore on a local Supabase showed this works.
 - The backups hold users' email addresses, and Supabase's sign-in records (for example sessions). That's why they're encrypted ([0022](0022-backups-encrypted-with-age.md)).
-- If the app starts using another Supabase feature that saves data, like file uploads, the backup leaves it out until someone adds its schema.
+- If a new feature saves data with another Supabase feature, the backup leaves it out. For example, letting the user attach images or PDFs to a task note would keep them in Supabase Storage: the backup would miss the `storage` tables and the files themselves, which aren't in the database at all.
 
-**Revisit if:** the tables stop pointing to `auth.users`, the app starts saving data outside `public`, or Supabase offers its own downloadable backups on the free plan.
+**Revisit if:** the tables stop pointing to `auth.users`, a new feature saves data outside the `public` tables (for example, images or PDFs attached to a task note), or Supabase offers its own downloadable backups on the free plan.

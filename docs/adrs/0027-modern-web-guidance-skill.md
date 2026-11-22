@@ -11,7 +11,7 @@ The skill sends anonymous usage data to Google by default: which guides an agent
 
 ## Decision
 
-The skill is copied into the repo with the `skills` tool (`npx skills add GoogleChrome/modern-web-guidance`), in `.agents/skills/` with a symlink in `.claude/skills/` ([0019](0019-skills-in-agents-folder.md)). `skills-lock.json` records which version we have. `npx skills update` gets a newer one.
+The skill is copied into the repo with the `skills` tool (`npx skills add GoogleChrome/modern-web-guidance`), in `.agents/skills/` with a symlink in `.claude/skills/` ([0019](0019-skills-in-agents-folder.md)). `skills-lock.json` records which version we have. A workflow updates it every week ([0028](0028-weekly-skill-updates.md)).
 
 - **No rule in `AGENTS.md`.** The rule applies only to web code, so it doesn't belong there ([0018](0018-rules-for-some-tasks-in-skills.md)). The skill's own description already tells agents to use it first for HTML, CSS and browser JavaScript.
 - **No usage data.** `.claude/settings.json` sets `DISABLE_TELEMETRY=1` for this project. The skill's tool reads it and stops sending data. Claude Code reads it too, and stops sending its own usage data here.

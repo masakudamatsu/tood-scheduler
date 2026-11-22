@@ -46,6 +46,8 @@ The main parts of the app, where each one lives, and the decision records (in [a
   - adrs: [0013](adrs/0013-pre-commit-hook.md)
 - **CodeRabbit review**: [.coderabbit.yaml](../.coderabbit.yaml). An AI reviewer that comments on every pull request into `main` and checks it against the rules for agents.
   - adrs: [0026](adrs/0026-coderabbit-reviews-pull-requests.md), [0027](adrs/0027-modern-web-guidance-skill.md)
+- **Skill updates**: [.github/workflows/update-skills.yml](../.github/workflows/update-skills.yml) and [scripts/update-skills.sh](../scripts/update-skills.sh). Once a week, updates the skills from other people that the workflow names, and opens a pull request.
+  - adrs: [0027](adrs/0027-modern-web-guidance-skill.md), [0028](adrs/0028-weekly-skill-updates.md)
 
 ## Backups
 

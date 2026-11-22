@@ -1,0 +1,126 @@
+name: Update skills
+
+# Once a week, updates the skills from other people that we keep up to date.
+# If any changed, opens a pull request into main, or updates the one already open.
+# Why: docs/adrs/0028.
+
+on:
+  schedule:
+    # Monday 03:00 Japan time (Sunday 18:00 UTC), before Masa may be working on the app.
+    # GitHub may start it a few minutes late.
+    - cron: "0 18 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write # push the update branch
+  pull-requests: write # open the pull request
+  actions: write # start CI on the update branch
+
+concurrency:
+  group: update-skills
+  cancel-in-progress: false
+
+env:
+  # The skills to update, separated by spaces. A skill not named here is never updated.
+  SKILLS: modern-web-guidance
+  BRANCH: chore/update-skills
+
+jobs:
+  update:
+    if: ${{ !github.event.repository.fork }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Update the skills
+        # $SKILLS is left unquoted on purpose, so each name is passed on its own.
+        run: scripts/update-skills.sh $SKILLS
+
+      - name: Open or update the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "The skills are up to date."
+            exit 0
+          fi
+
+          # A link to what changed in each skill's source since the version we had.
+          changes="$(jq -rn --slurpfile old <(git show HEAD:skills-lock.json) --slurpfile new skills-lock.json '
+            $new[0].skills | to_entries[]
+            | select(.value.commit != $old[0].skills[.key].commit)
+            | "- `\(.key)`: " + (
+                if .value.sourceType == "github" and $old[0].skills[.key].commit
+                then "[what changed](https://github.com/\(.value.source)/compare/\($old[0].skills[.key].commit)...\(.value.commit))"
+                else "new version from `\(.value.source)`"
+                end)')"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git add -A
+          git commit -q -F - <<EOF
+          chore(skills): update ${SKILLS// /, }
+
+          Google and other authors update their skills often. This brings in their latest versions, so agents follow current advice. Made by the Update skills workflow (docs/adrs/0028).
+          EOF
+
+          # If the branch already has exactly these files, don't push it again.
+          # Still check the pull request and CI below: an earlier run may have
+          # pushed the branch and then failed to open the pull request or start CI.
+          if git fetch -q origin "$BRANCH" 2>/dev/null && git diff --quiet FETCH_HEAD HEAD; then
+            echo "The branch already has this update."
+            head="$(git rev-parse FETCH_HEAD)"
+          else
+            # The branch is made again from main each week, so it replaces last week's update.
+            git push --force origin "$BRANCH"
+            head="$(git rev-parse HEAD)"
+          fi
+
+          body="$RUNNER_TEMP/body.md"
+          cat > "$body" <<EOF
+          ## What changed
+
+          The Update skills workflow updated these skills to their latest version:
+
+          $changes
+
+          Each week, this branch is made again from \`main\`, so don't add your own commits to it.
+
+          ## How to check
+
+          1. Open each link above and read what changed.
+          2. Check that nothing in it goes against a rule in \`AGENTS.md\` or a record in \`docs/adrs/\`.
+
+          ## Tests
+
+          The workflow starts CI on this branch. Wait for \`verify\` to pass.
+
+          ## Database
+
+          No database change.
+          EOF
+
+          number="$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number')"
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --body-file "$body"
+          else
+            gh pr create --base main --head "$BRANCH" --title "chore(skills): update ${SKILLS// /, }" --body-file "$body"
+          fi
+
+          # A pull request opened with this workflow's own token doesn't start other
+          # workflows, so CI wouldn't run. Starting CI by hand is allowed.
+          # Start it only if it hasn't run for this commit yet.
+          runs="$(gh run list --workflow ci.yml --commit "$head" --json databaseId --jq length)"
+          if [ "$runs" = 0 ]; then
+            gh workflow run ci.yml --ref "$BRANCH"
+          else
+            echo "CI has already run for this update."
+          fi

@@ -82,6 +82,14 @@ Before each commit, a hook (a script Git runs for you) checks lint and types. `n
 4. Copy your new link (for example `https://todo-scheduler-xyz.vercel.app`). Back in Supabase **Authentication → URL Configuration**, set it as the **Site URL** and add it to **Redirect URLs**.
 5. To sign in on preview deployments too (the test links Vercel makes for each branch), also add `https://<project-name>-*-<your-vercel-account>.vercel.app/**` to **Redirect URLs**. The `*` matches any branch name. Without this, the sign-in link sends you to the Site URL instead.
 
+## 5. Backups
+
+The free Supabase plan has no backups you can download. So a GitHub workflow saves the whole database after every merge to `main` and once a day at 03:00 Japan time. It encrypts the file and uploads it to a private Cloudflare R2 bucket (Cloudflare's file storage). Each file is deleted 90 days after upload.
+
+GitHub turns off scheduled workflows in a public repo after 60 days with no activity. The backup after each merge still runs.
+
+The workflow runs only in the original repo, not in copies of it. To get the data back from a backup, see [docs/restore-backup.md](docs/restore-backup.md).
+
 ## Project layout
 
 | Path | What's in it |
@@ -99,6 +107,9 @@ Before each commit, a hook (a script Git runs for you) checks lint and types. `n
 | `tests/` | Playwright tests, one per feature |
 | `.githooks/pre-commit` | Checks lint and types before each commit |
 | `.github/workflows/ci.yml` | Runs `npm run verify` on GitHub |
+| `.github/workflows/backup.yml` | Backs up the database to Cloudflare R2 |
+| `scripts/backup-dump.sh` | Dumps the database for the backup |
+| `scripts/restore-backup.sh` | Loads a backup into an empty database |
 
 ## Not built yet
 

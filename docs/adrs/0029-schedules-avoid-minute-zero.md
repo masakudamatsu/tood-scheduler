@@ -5,7 +5,7 @@
 
 ## Context
 
-The [backup](../../.github/workflows/backup.yml) and [skill update](../../.github/workflows/update-skills.yml) workflows were set to start at 03:00 Japan time ([0025](0025-backup-times-in-japan-time.md), [0028](0028-weekly-skill-updates.md)). On November 23, both started at about 08:25 instead: more than 5 hours late ([#76](https://github.com/masakudamatsu/todo-scheduler/issues/76)).
+The [backup](../../.github/workflows/backup.yml) and [skill update](../../.github/workflows/update-skills.yml) workflows were set to start at 03:00 Japan time ([0025](0025-backup-times-in-japan-time.md), [0028](0028-weekly-skill-updates.md)). On November 23, both started at about 08:25 instead: more than 5 hours late ([#76](https://github.com/masakudamatsu/tood-scheduler/issues/76)).
 
 GitHub starts a scheduled workflow only when it has room, and promises no time. Its docs say the start of every hour is the busiest time, that runs can be late or even dropped then, and that a different minute makes this less likely ([Events that trigger workflows → schedule](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)).
 

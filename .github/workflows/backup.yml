@@ -11,9 +11,9 @@ on:
   push:
     branches: [main]
   schedule:
-    # 03:00 Japan time (18:00 UTC). Why Japan time: docs/adrs/0025.
-    # GitHub may start it a few minutes late.
-    - cron: "0 18 * * *"
+    # 03:17 Japan time (18:17 UTC). Why Japan time: docs/adrs/0025.
+    # Why minute 17: docs/adrs/0029. GitHub may still start it late.
+    - cron: "17 18 * * *"
   workflow_dispatch:
 
 permissions:

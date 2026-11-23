@@ -15,7 +15,7 @@ The `skills` tool has some surprises when nobody is there to answer its question
 
 ## Decision
 
-Every Monday at 03:00 Japan time (Sunday 18:00 UTC), [.github/workflows/update-skills.yml](../../.github/workflows/update-skills.yml) runs [scripts/update-skills.sh](../../scripts/update-skills.sh). If a skill changed, the workflow opens a pull request from the branch `chore/update-skills` into `main`, or updates the one already open. Masa reads the link to what changed and merges it. Nothing is merged on its own.
+Every Monday at 03:17 Japan time (Sunday 18:17 UTC; why minute 17: [0029](0029-schedules-avoid-minute-zero.md)), [.github/workflows/update-skills.yml](../../.github/workflows/update-skills.yml) runs [scripts/update-skills.sh](../../scripts/update-skills.sh). If a skill changed, the workflow opens a pull request from the branch `chore/update-skills` into `main`, or updates the one already open. Masa reads the link to what changed and merges it. Nothing is merged on its own.
 
 It runs at night so the skill doesn't change while Masa may be working on the app and using it. Like the backup ([0025](0025-backup-times-in-japan-time.md)), the time is in Japan time.
 

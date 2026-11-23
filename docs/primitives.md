@@ -47,12 +47,12 @@ The main parts of the app, where each one lives, and the decision records (in [a
 - **CodeRabbit review**: [.coderabbit.yaml](../.coderabbit.yaml). An AI reviewer that comments on every pull request into `main` and checks it against the rules for agents.
   - adrs: [0026](adrs/0026-coderabbit-reviews-pull-requests.md), [0027](adrs/0027-modern-web-guidance-skill.md)
 - **Skill updates**: [.github/workflows/update-skills.yml](../.github/workflows/update-skills.yml) and [scripts/update-skills.sh](../scripts/update-skills.sh). Once a week, updates the skills from other people that the workflow names, and opens a pull request.
-  - adrs: [0027](adrs/0027-modern-web-guidance-skill.md), [0028](adrs/0028-weekly-skill-updates.md)
+  - adrs: [0027](adrs/0027-modern-web-guidance-skill.md), [0028](adrs/0028-weekly-skill-updates.md), [0029](adrs/0029-schedules-avoid-minute-zero.md)
 
 ## Backups
 
 - **Backup workflow**: [.github/workflows/backup.yml](../.github/workflows/backup.yml) and [scripts/backup-dump.sh](../scripts/backup-dump.sh). Saves the whole database, encrypted, to Cloudflare R2.
-  - adrs: [0020](adrs/0020-backups-in-cloudflare-r2.md), [0021](adrs/0021-r2-account-api-token.md), [0022](adrs/0022-backups-encrypted-with-age.md), [0023](adrs/0023-backups-kept-90-days.md), [0024](adrs/0024-backup-includes-auth-users.md), [0025](adrs/0025-backup-times-in-japan-time.md)
+  - adrs: [0020](adrs/0020-backups-in-cloudflare-r2.md), [0021](adrs/0021-r2-account-api-token.md), [0022](adrs/0022-backups-encrypted-with-age.md), [0023](adrs/0023-backups-kept-90-days.md), [0024](adrs/0024-backup-includes-auth-users.md), [0025](adrs/0025-backup-times-in-japan-time.md), [0029](adrs/0029-schedules-avoid-minute-zero.md)
 - **Restore script**: [scripts/restore-backup.sh](../scripts/restore-backup.sh). Loads a backup file into an empty database. How to use it: [restore-backup.md](restore-backup.md).
   - adrs: [0022](adrs/0022-backups-encrypted-with-age.md), [0024](adrs/0024-backup-includes-auth-users.md)
 

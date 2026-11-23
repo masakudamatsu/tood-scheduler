@@ -1,6 +1,6 @@
 # Restore a backup
 
-The [Backup workflow](../.github/workflows/backup.yml) saves the whole database to a Cloudflare R2 bucket (Cloudflare's file storage). It runs after every merge to `main`, once a day at 03:00 Japan time, and whenever you start it by hand from the **Actions** tab. Each file is encrypted with `age` (a small encryption tool) and named by the time in Japan when it was made: for example `2026-11-22T03-00-00JST.sql.age`. The bucket deletes each file 90 days after upload.
+The [Backup workflow](../.github/workflows/backup.yml) saves the whole database to a Cloudflare R2 bucket (Cloudflare's file storage). It runs after every merge to `main`, once a day at about 03:17 Japan time, and whenever you start it by hand from the **Actions** tab. Each file is encrypted with `age` (a small encryption tool) and named by the time in Japan when it was made: for example `2026-11-22T03-00-00JST.sql.age`. The bucket deletes each file 90 days after upload.
 
 Why it works this way: [0020](adrs/0020-backups-in-cloudflare-r2.md) (R2), [0021](adrs/0021-r2-account-api-token.md) (the token), [0022](adrs/0022-backups-encrypted-with-age.md) (encryption), [0023](adrs/0023-backups-kept-90-days.md) (90 days), [0024](adrs/0024-backup-includes-auth-users.md) (what's in the file), [0025](adrs/0025-backup-times-in-japan-time.md) (Japan time).
 

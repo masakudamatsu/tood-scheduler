@@ -6,9 +6,9 @@ name: Update skills
 
 on:
   schedule:
-    # Monday 03:00 Japan time (Sunday 18:00 UTC), before Masa may be working on the app.
-    # GitHub may start it a few minutes late.
-    - cron: "0 18 * * 0"
+    # Monday 03:17 Japan time (Sunday 18:17 UTC), before Masa may be working on the app.
+    # Why minute 17: docs/adrs/0029. GitHub may still start it late.
+    - cron: "17 18 * * 0"
   workflow_dispatch:
 
 permissions:

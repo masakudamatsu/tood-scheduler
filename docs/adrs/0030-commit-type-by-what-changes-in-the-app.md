@@ -15,7 +15,6 @@ We decided against `chore` for skills, `AGENTS.md` and workflows, as #71 and #78
 
 ## Consequences
 
-- `git log --grep '^feat\|^fix'` lists only changes people using the app notice.
-- Commits already on `main` keep their old types.
+- Commits made before 2026-11-25 keep their old types, so two workflow changes among them are typed `fix`: `27e526d fix(backup): …` and `348bd44 fix(skills): …`. From that date on, `feat` and `fix` are only for changes people using the app notice.
 
 **Revisit if:** picking between `docs`, `ci` and `chore` often takes thought, or a change doesn't fit any of them.

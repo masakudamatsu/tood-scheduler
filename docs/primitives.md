@@ -59,4 +59,4 @@ The main parts of the app, where each one lives, and the decision records (in [a
 ## Rules for agents
 
 - **Agent rules**: [AGENTS.md](../AGENTS.md) (rules for every task), [CLAUDE.md](../CLAUDE.md) (only imports AGENTS.md) and [.agents/skills/](../.agents/skills/) (rules and steps for only some tasks, with a symlink to each in `.claude/skills/`). One skill, `modern-web-guidance`, comes from Google Chrome and isn't edited here.
-  - adrs: [0014](adrs/0014-every-decision-gets-a-record.md), [0016](adrs/0016-docs-not-what-code-says.md), [0017](adrs/0017-claude-md-imports-agents-md.md), [0018](adrs/0018-rules-for-some-tasks-in-skills.md), [0019](adrs/0019-skills-in-agents-folder.md), [0027](adrs/0027-modern-web-guidance-skill.md)
+  - adrs: [0014](adrs/0014-every-decision-gets-a-record.md), [0016](adrs/0016-docs-not-what-code-says.md), [0017](adrs/0017-claude-md-imports-agents-md.md), [0018](adrs/0018-rules-for-some-tasks-in-skills.md), [0019](adrs/0019-skills-in-agents-folder.md), [0027](adrs/0027-modern-web-guidance-skill.md), [0030](adrs/0030-commit-type-by-what-changes-in-the-app.md)

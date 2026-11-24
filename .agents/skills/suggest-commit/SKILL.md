@@ -21,8 +21,17 @@ As the baseline, follow [Conventional Commits 1.0.0](https://www.conventionalcom
 
 ### Type
 
-- Use `chore` for dependency updates, `npm audit fix`, and other maintenance that has no user-facing effect — even if it patches a security vulnerability.
-- Reserve `fix` for bugs that affect users.
+Pick the type by what changes for people using the app, not by whether the change corrects a mistake ([0030](../../../docs/adrs/0030-commit-type-by-what-changes-in-the-app.md)).
+
+- `feat`: something new that people using the app can see or do.
+- `fix`: a bug that people using the app run into.
+- Anything else is not `feat` or `fix`, even when it corrects a mistake:
+  - `ci`: GitHub workflows (`.github/workflows/`) and the scripts they run.
+  - `test`: only tests change.
+  - `docs`: only docs change: the README, `docs/`, `AGENTS.md` or a skill.
+  - `chore`: other maintenance, such as dependency updates, `npm audit fix` and settings, even if it patches a security vulnerability.
+
+Before you write `feat` or `fix`, name the screen or behavior in the app that changes. If you can't name one, use another type.
 
 ### Scope
 

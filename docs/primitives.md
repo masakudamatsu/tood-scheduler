@@ -33,8 +33,8 @@ The main parts of the app, where each one lives, and the decision records (in [a
   - adrs: [0006](adrs/0006-drag-overlay.md)
 - **Daily limit input**: [src/components/MaxHoursInput.tsx](../src/components/MaxHoursInput.tsx). Where the user sets the maximum hours per day.
   - adrs: [0008](adrs/0008-one-limit-for-all-days.md)
-- **Popups**: [Popup.tsx](../src/components/Popup.tsx) (the shared popup), [AddTaskPopup.tsx](../src/components/AddTaskPopup.tsx) (the new task popup), [TaskSheet.tsx](../src/components/TaskSheet.tsx) (edit or delete a task) and [TaskFields.tsx](../src/components/TaskFields.tsx) (the fields both popups share).
-  - adrs: []
+- **Popups**: [Popup.tsx](../src/components/Popup.tsx) (`Modal`, the native dialog under every popup, and `Popup`, the shared popup form), [AddTaskPopup.tsx](../src/components/AddTaskPopup.tsx) (the new task popup), [TaskSheet.tsx](../src/components/TaskSheet.tsx) (edit or delete a task) and [TaskFields.tsx](../src/components/TaskFields.tsx) (the fields both popups share).
+  - adrs: [0031](adrs/0031-baseline-widely-available.md), [0032](adrs/0032-popups-use-native-dialog.md)
 - **Links in notes**: [src/lib/linkify.tsx](../src/lib/linkify.tsx). Turns URLs in a note into links.
   - adrs: [0009](adrs/0009-no-link-previews.md)
 

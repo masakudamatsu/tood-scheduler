@@ -22,6 +22,6 @@ The skill is copied into the repo with the `skills` tool (`npx skills add Google
 - Agents get current best practice for web code without us writing it down.
 - The skill runs `npx modern-web-guidance` to search its guides, so it needs the network. That's fine for coding, but `npm test` must never use it.
 - An agent without `DISABLE_TELEMETRY` set, such as one not run by Claude Code, still sends usage data.
-- The guides say which features are safe in which browsers. We have no rule yet for which browsers must work, so some fixes add fallbacks we might not need.
+- The guides say which features are safe in which browsers. Their default, Baseline Widely available, is also the app's rule for which browsers must work ([0031](0031-baseline-widely-available.md)).
 
-**Revisit if:** the skill's advice keeps clashing with what we decided for the app, or we set a rule for which browsers must work (then add it to `AGENTS.md`).
+**Revisit if:** the skill's advice keeps clashing with what we decided for the app.

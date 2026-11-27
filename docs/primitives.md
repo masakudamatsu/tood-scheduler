@@ -40,8 +40,8 @@ The main parts of the app, where each one lives, and the decision records (in [a
 
 ## Checks
 
-- **Tests**: [tests/](../tests/). Playwright tests, one per feature.
-  - adrs: [0007](adrs/0007-tests-check-class-names.md)
+- **Tests**: [tests/](../tests/). Playwright tests, one per feature. [playwright.config.ts](../playwright.config.ts) picks the browsers they run in.
+  - adrs: [0007](adrs/0007-tests-check-class-names.md), [0032](adrs/0032-test-in-chrome-and-iphone-webkit.md)
 - **Pre-commit hook**: [.githooks/pre-commit](../.githooks/pre-commit). Runs lint and the type check before each commit.
   - adrs: [0013](adrs/0013-pre-commit-hook.md)
 - **CodeRabbit review**: [.coderabbit.yaml](../.coderabbit.yaml). An AI reviewer that comments on every pull request into `main` and checks it against the rules for agents.

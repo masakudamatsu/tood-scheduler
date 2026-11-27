@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { NewTaskInput } from "@/lib/types";
-import Popup, { CancelAndSave } from "./Popup";
+import Popup, { CancelAndSave, focusOpener } from "./Popup";
 import TaskFields, { parseTaskFields, type TaskFieldValues } from "./TaskFields";
 
 /** The round + button at the bottom right, and the new task popup it opens. */
@@ -19,7 +19,10 @@ export default function AddTaskPopup({
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={(e) => {
+          focusOpener(e);
+          setOpen(true);
+        }}
         aria-label="Add a task"
         title="Add a task"
         className="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-30 flex size-12 items-center justify-center rounded-full bg-teal-700 text-white shadow-lg hover:bg-teal-800 sm:right-6 sm:bottom-6"

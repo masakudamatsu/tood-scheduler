@@ -5,6 +5,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Task } from "@/lib/types";
 import { formatHours } from "./DaySection";
+import { focusOpener } from "./Popup";
 
 /** A task card you can drag up/down within its day, or onto another day. */
 export default function TaskCard({
@@ -80,7 +81,13 @@ export function TaskCardView({
       />
       <button
         type="button"
-        onClick={onOpen}
+        onClick={
+          onOpen &&
+          ((e) => {
+            focusOpener(e);
+            onOpen();
+          })
+        }
         tabIndex={lifted ? -1 : undefined}
         className="flex min-w-0 flex-1 items-center gap-2 text-left"
       >

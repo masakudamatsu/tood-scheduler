@@ -1,4 +1,4 @@
-# 0032: Popups use the native dialog element
+# 0033: Popups use the native dialog element
 
 - **Status:** accepted
 - **Date:** 2026-11-26

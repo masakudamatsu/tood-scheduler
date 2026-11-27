@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import type { Task, TaskPatch } from "@/lib/types";
-import Popup, { CancelAndSave, Modal } from "./Popup";
+import Popup, { CancelAndSave, focusOpener, Modal } from "./Popup";
 import TaskFields, { parseTaskFields, type TaskFieldValues } from "./TaskFields";
 
 export default function TaskSheet({
@@ -75,7 +75,10 @@ export default function TaskSheet({
         <div className="mt-5 flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setConfirmingDelete(true)}
+            onClick={(e) => {
+              focusOpener(e);
+              setConfirmingDelete(true);
+            }}
             className="rounded-md px-3 py-1.5 text-sm text-red-700 hover:bg-red-50"
           >
             Delete

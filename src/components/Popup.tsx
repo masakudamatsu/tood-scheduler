@@ -8,10 +8,21 @@ const needsTapOutsideFallback =
   typeof HTMLDialogElement !== "undefined" && !("closedBy" in HTMLDialogElement.prototype);
 
 /**
+ * Call this first in the click handler of a button that opens a popup.
+ * When a popup closes, the browser puts focus back on whatever had focus when
+ * it opened. Safari doesn't focus a button when you click it, so without this
+ * there's nothing to go back to (docs/adrs/0033).
+ */
+export function focusOpener(e: React.MouseEvent<HTMLElement>) {
+  e.currentTarget.focus();
+}
+
+/**
  * A native <dialog>, open over the page while it's mounted. The browser keeps
  * focus inside it, closes it on Escape or a tap outside, and puts focus back
- * on the button that opened it. Escape closes only the top dialog, so a
- * question opened over another dialog closes first.
+ * on the button that opened it (if that button calls focusOpener). Escape
+ * closes only the top dialog, so a question opened over another dialog closes
+ * first.
  *
  * onClose runs when the user closes it. The parent then removes it.
  */

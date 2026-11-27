@@ -28,7 +28,8 @@ We decided against:
 ## Consequences
 
 - No focus trap, Escape handler or `aria-modal` of our own. Don't add them: they would fight the browser's.
+- The browser puts focus back on whatever had focus when the popup opened. Safari doesn't focus a button when you click it, so every button that opens a popup focuses itself first, with `focusOpener` in [Popup.tsx](../../src/components/Popup.tsx). A new button that opens a popup needs it too.
 - A popup closes when its parent removes it from the page. `Modal` calls `close()` just before that happens, because removing an open dialog doesn't put focus back.
-- Safari doesn't support `closedby="any"` (tap outside to close) yet, so `Modal` has a small fallback for it ([0031](0031-baseline-widely-available.md)). In Safari, the page behind can also still scroll.
+- Safari doesn't support `closedby="any"` (tap outside to close) yet, so `Modal` has a small fallback for it ([0031](0031-baseline-widely-available.md)). In Safari, the page behind can also still scroll. And with the delete question open, Tab can stop on the task details box behind it (but on nothing inside that box).
 
 **Revisit if:** `closedby` becomes Baseline Widely available. Then remove the fallback.

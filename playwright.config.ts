@@ -11,13 +11,19 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: "retain-on-failure",
-    // Optional: point at an already-installed Chromium instead of downloading one.
-    launchOptions: process.env.PW_CHROMIUM_PATH
-      ? { executablePath: process.env.PW_CHROMIUM_PATH }
-      : {},
   },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
+    {
+      name: "desktop",
+      use: {
+        ...devices["Desktop Chrome"],
+        // Optional: point at an already-installed Chromium instead of downloading one.
+        // Set here, not above, so WebKit doesn't try to start from it.
+        launchOptions: process.env.PW_CHROMIUM_PATH
+          ? { executablePath: process.env.PW_CHROMIUM_PATH }
+          : {},
+      },
+    },
     // Safari on Masa's phone. Why these two: docs/adrs/0032-test-in-chrome-and-iphone-webkit.md
     { name: "iphone", use: { ...devices["iPhone SE (3rd gen)"] } },
   ],

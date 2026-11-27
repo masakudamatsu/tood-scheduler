@@ -19,8 +19,10 @@ test("the + button opens a new task popup; Cancel or a tap outside closes it", a
   expect(box.x + box.width).toBeGreaterThan(screen.width - 48);
   expect(box.y + box.height).toBeGreaterThan(screen.height - 48);
 
-  // It stays there while the page scrolls.
-  await page.mouse.wheel(0, 2000);
+  // It stays there while the page scrolls. (Phone WebKit has no mouse wheel,
+  // so scroll from inside the page.)
+  await page.evaluate(() => window.scrollBy(0, 2000));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   await expect
     .poll(async () => (await button.boundingBox())!.y)
     .toBeCloseTo(box.y, 0);
@@ -45,7 +47,9 @@ test("the + button opens a new task popup; Cancel or a tap outside closes it", a
   await button.click();
   await expect(popup.getByLabel("Title")).toHaveValue("");
   await popup.getByLabel("Title").fill("Never mind");
-  await page.mouse.click(10, screen.height / 2);
+  // Tap above the popup: on a phone it's a sheet that fills the lower half.
+  const popupTop = (await popup.boundingBox())!.y;
+  await page.mouse.click(10, popupTop / 2);
   await expect(popup).toBeHidden();
   await expect(card(page, "Never mind")).toHaveCount(0);
 });

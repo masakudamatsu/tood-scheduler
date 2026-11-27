@@ -18,6 +18,8 @@ export default defineConfig({
   },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
+    // Safari on Masa's phone. Why these two: docs/adrs/0032-test-in-chrome-and-iphone-webkit.md
+    { name: "iphone", use: { ...devices["iPhone SE (3rd gen)"] } },
   ],
   webServer: {
     command: `npx next dev -p ${PORT}`,

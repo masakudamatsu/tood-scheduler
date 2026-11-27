@@ -46,11 +46,11 @@ Open http://localhost:3000. Without Supabase keys the app runs in **local mode**
 ## 3. Run the tests
 
 ```bash
-npx playwright install chromium   # first time only
+npx playwright install chromium webkit   # first time only
 npm test
 ```
 
-There's one Playwright test per feature, in `tests/`. Tests start their own server in local mode on port 3100, so they never touch your real tasks and don't need Supabase.
+There's one Playwright test per feature, in `tests/`. Each test runs twice: in Chrome on a laptop-sized screen, and in WebKit (the engine behind Safari) acting like an iPhone SE. Tests start their own server in local mode on port 3100, so they never touch your real tasks and don't need Supabase.
 
 `npm run verify` runs every check in one go: lint (a style and mistake checker), the type check and the tests. GitHub runs the same command on every pull request and every push to `main`.
 
